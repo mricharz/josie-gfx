@@ -15,6 +15,27 @@
 
         //set an alias for ui-lib to easy access that namespace
         Josie.alias('gfx', 'com.nysoft.josie.gfx');
+
+        function exportObjects(oObject) {
+            if(oObject instanceof com.nysoft.josie.core.BaseObject) {
+                console.log(oObject.className);
+                var oProperties = oObject.getProperties();
+                var oExportedProperties = {};
+                jQuery.each(oProperties, function(key, value) {
+                    oExportedProperties[key] = exportObjects(value);
+                });
+                return oExportedProperties;
+            } else if(Josie.utils.isjQuery(oObject)) {
+                return "<DOM-Node>";
+            } else if(oObject instanceof Array) {
+                oObject = jQuery.map(oObject, function(value, key) {
+                    return exportObjects(value);
+                });
+                return oObject;
+            } else {
+                return oObject;
+            }
+        }
     </script>
     <style>
         body {
