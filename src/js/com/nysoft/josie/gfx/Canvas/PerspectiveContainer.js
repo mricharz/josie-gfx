@@ -1,7 +1,7 @@
-jQuery.require('com.nysoft.josie.core.BaseObject');
-jQuery.require('com.nysoft.josie.ui.Canvas.Vector');
+Josie.require('com.nysoft.josie.core.BaseObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.Vector');
 
-com.nysoft.josie.core.BaseObject.extend('com.nysoft.josie.ui.Canvas.PerspectiveContainer', {
+com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.PerspectiveContainer', {
 	meta: {
 		layerCount: { type: 'number', defaultValue: 10 },
 		depth: { type: 'number', defaultValue: 20 }
@@ -17,10 +17,6 @@ com.nysoft.josie.core.BaseObject.extend('com.nysoft.josie.ui.Canvas.PerspectiveC
 		this.objects = [];
 	},
 	
-	addObject: function(object) {
-		this.objects.push(object);
-	},
-	
 	onRotate: function(event, a, b, g) {
 		if(g)
 			this.g = Math.round(g);
@@ -31,18 +27,18 @@ com.nysoft.josie.core.BaseObject.extend('com.nysoft.josie.ui.Canvas.PerspectiveC
 	render: function(canvas) {
 		var layerCount = this.getLayerCount(), depth = this.getDepth(), g = this.g, b = this.b;
 		for(var i = layerCount; i > 0; i--) {
-			jQuery.each(this.objects, function() {
-				var oVector = this.getVector(),
+			Josie.utils.each(this.getContent(), function(oObject) {
+				var oVector = oObject.getVector(),
 					baseX = oVector.getX(),
 					baseY = oVector.getY();
-				if(jQuery.device.mode.landscape) {
+				if(Josie.device.mode.landscape) {
 					oVector.setY(baseY+(g*(i/depth)));
 					oVector.setX(baseX-(b*(i/depth)));
 				} else {
 					oVector.setX(baseX-(g*(i/depth)));
 					oVector.setY(baseY-(b*(i/depth)));
 				}
-				this.render(canvas);
+                oObject.render(canvas);
 				//reset vector
 				oVector.setX(baseX);
 				oVector.setY(baseY);

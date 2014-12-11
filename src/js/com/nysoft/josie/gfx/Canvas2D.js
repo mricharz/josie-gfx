@@ -1,52 +1,45 @@
-jQuery.require('com.nysoft.josie.ui.Canvas');
+Josie.require('com.nysoft.josie.gfx.Canvas');
 
-com.nysoft.josie.ui.Canvas.extend('com.nysoft.josie.ui.Canvas2D', {
+com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 	meta: {
 		context: 'object',
-		objects: { type: 'object', defaultValue: [] },
 		measureCallback: 'function',
 		measurement: 'boolean'
 	},
 	
-	init: function() {
-		this._super('init');
-
-		//init for performance measurement
-		this.fps = 0;
-		this.now = null;
-		this.lastUpdate = (new Date)*1 - 1;
-		this.fpsFilter = 50; //highcap
-	},
-	
 	_renderControl: function() {
-		this._super('_renderControl');
-		if(this.getCanvas()) {
-			//set canvas2d-CSSClass
-			if(!this.getDom().hasClass('canvas2d'))
-				this.getDom().addClass('canvas2d');
-			//get 2d context out of canvas
-			this.setContext(this.getCanvas().get(0).getContext('2d'));
-		}
-		
 		//init loops
 		this.loops = {};
 		//start animationLooping
 		this._animationLoop();
-		
-		//init for performance measurement
-		this.fps = 0;
-		this.now = null;
-		this.lastUpdate = (new Date)*1 - 1;
-		this.fpsFilter = 50; //highcap
+
+        if(this.getMeasurement()) {
+            //init for performance measurement
+            this.fps = 0;
+            this.now = null;
+            this.lastUpdate = (new Date) * 1 - 1;
+            this.fpsFilter = 50; //highcap
+        }
+
+        this._super('_renderControl', arguments);
 	},
+
+    getContext: function() {
+        var oContext = this.getProperty('context');
+        if(!oContext && this.getDom().length) {
+            oContext = this.getDom().get(0).getContext('2d');
+            this.setProperty('context', oContext);
+        }
+        return oContext;
+    },
 	
 	getObject: function(iIndex) {
-		var aObjects = this.getObjects();
+		var aObjects = this.getContent();
 		return aObjects[iIndex] || null;
 	},
 	
 	addObject: function(object) {
-		return this.getObjects().push(object)-1;
+		return this.getContent().push(object)-1;
 	},
 	
 	addObjects: function(aObjects) {
@@ -65,43 +58,39 @@ com.nysoft.josie.ui.Canvas.extend('com.nysoft.josie.ui.Canvas2D', {
 
 		// Use the identity matrix while clearing the canvas
 		this.getContext().setTransform(1, 0, 0, 1, 0, 0);
-		this.getContext().clearRect(0, 0, this.getCanvas().get(0).width, this.getCanvas().get(0).height);
+		this.getContext().clearRect(0, 0, this.getDom().get(0).width, this.getDom().get(0).height);
 
 		// Restore the transform
 		this.getContext().restore();
 	},
 	
 	renderObjects: function() {
-		var aObjects = this.getObjects();
+		var aObjects = this.getContent();
 		if(aObjects && aObjects.length) {
-			jQuery.each(aObjects, jQuery.proxy(function(index, object) {
-				jQuery.log.trace('Render CanvasObject', object);
-				object.render(this, index);
+			Josie.utils.each(aObjects, jQuery.proxy(function(oObject, index) {
+				this._renderContentItem(oObject, index);
 			}, this));
 		}
 	},
 	
-	render: function() {
+	_renderContent: function() {
 		this.renderObjects();
-		(this.getMeasurement()) && this._measureFrame();
+		if(this.getMeasurement()) {
+            this._measureFrame();
+        }
 	},
 	
 	rerender: function() {
+        this.trigger('onBeforeRenderer');
 		this.clearCanvas();
-		this.render();
+		this._renderContent();
+        this.trigger('onAfterRenderer');
 	},
 	
-	_openImage: function(file, callback) {
-		image = new Image();
-		image.onload = callback;
-		image.src = file;
-		return image;
-	},
-	
-	drawImage: function(file, vector) {
-		tmpImage = this._openImage(file, jQuery.proxy(function(){
-			this.getContext().drawImage(tmpImage, vector.getX(), vector.getY(), tmpImage.width, tmpImage.height);
-		}, this));
+	drawImage: function(oImage, vector, height, width) {
+        if(oImage instanceof Image) {
+            this.getContext().drawImage(oImage, vector.getX(), vector.getY(), width, height);
+        }
 	},
 	
 	_measureFrame: function() {
@@ -134,8 +123,8 @@ com.nysoft.josie.ui.Canvas.extend('com.nysoft.josie.ui.Canvas2D', {
 		if(this.loops) {
 			var bHaveToRerender = false;
 			//execute loops
-			jQuery.each(this.loops, jQuery.proxy(function(key, fnAnimation) {
-				jQuery.log.trace('Running canvas-Loop: '+key);
+			Josie.utils.each(this.loops, jQuery.proxy(function(key, fnAnimation) {
+				Josie.log.trace('Running canvas-Loop: '+key);
 				fnAnimation.call(this, key);
 				bHaveToRerender = true;
 			}, this));

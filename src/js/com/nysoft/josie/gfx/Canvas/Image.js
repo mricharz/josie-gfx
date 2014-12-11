@@ -1,6 +1,6 @@
-jQuery.require('com.nysoft.josie.ui.Canvas.CanvasObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.CanvasObject');
 
-com.nysoft.josie.ui.Canvas.CanvasObject.extend('com.nysoft.josie.ui.Canvas.Image', {
+com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Image', {
 	
 	meta: {
 		width: { type: 'number', defaultValue: 0 },
@@ -11,24 +11,21 @@ com.nysoft.josie.ui.Canvas.CanvasObject.extend('com.nysoft.josie.ui.Canvas.Image
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
 			oVector = this.getVector(),
-			sSource = this.getSource();
-		oContext.save();
-		this.applyRotation(canvas, this.getWidth(), this.getHeight());
-		jQuery.log.trace(this.getSource());
-		oContext.drawImage(this.getSource(), oVector.getX(), oVector.getY(), this.getWidth(), this.getHeight());
-		oContext.restore();
-		
-		jQuery.log.trace(sSource.width);
-		//if image is not ready, yet
-		if(!sSource.width) {
-			jQuery.log.trace('Trigger rerender of canvas because image is not ready, yet. ('+sSource.src+')');
-			//trigger canvas to rerender if image is ready
-			sSource.onload = jQuery.proxy(function() {
-				(!this.getWidth()) && this.setWidth(sSource.width);
-				(!this.getHeight()) && this.setHeight(sSource.height);
-				jQuery.log.trace('Rerender canvas because image is now ready.');
-				canvas.rerender();
-			}, this);
-		}
-	}
+			sSource = this.getSource(),
+            iWidth = this.getWidth(),
+            iHeight = this.getHeight();
+
+        this._image = this._openImage(sSource, function () {
+            iHeight = iHeight || this.height;
+            iWidth = iWidth || this.width;
+            canvas.drawImage(this, oVector, iWidth, iHeight);
+        });
+	},
+
+    _openImage: function(file, callback) {
+        image = new Image();
+        image.onload = callback;
+        image.src = file;
+        return image;
+    }
 });

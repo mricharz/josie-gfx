@@ -1,0 +1,32 @@
+{
+    "name": "josie-gfx",
+    "version": "0.0.1",
+    "description": "Josie Framework gfx-package",
+    "main": "gulpfile.js",
+    "dependencies": {},
+    "devDependencies": {
+        "gulp": "^3.8.8",
+        "gulp-foreach": "0.0.1",
+        "gulp-gzip": "0.0.8",
+        "gulp-qunit": "^0.3.3",
+        "gulp-rimraf": "^0.1.0",
+        "gulp-tar": "^1.1.0",
+        "gulp-uglifyjs": "^0.4.2",
+        "run-sequence": "^0.3.6",
+        "yargs": "^1.3.1",
+        "josie-core": "mricharz/josie-core"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mricharz/josie-gfx.git"
+    },
+    "author": "Manuel Richarz",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/mricharz/josie-gfx/issues"
+    },
+    "homepage": "https://github.com/mricharz/josie-gfx"
+}

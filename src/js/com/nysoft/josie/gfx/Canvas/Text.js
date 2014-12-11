@@ -1,14 +1,14 @@
-jQuery.require('com.nysoft.josie.ui.Canvas.StrokeAndFillObject');
-jQuery.require('com.nysoft.josie.ui.Canvas.Text.Style');
-jQuery.require('com.nysoft.josie.ui.Canvas.Text.Baseline');
+Josie.require('com.nysoft.josie.gfx.Canvas.StrokeAndFillObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.Text.Style');
+Josie.require('com.nysoft.josie.gfx.Canvas.Text.Baseline');
 
-com.nysoft.josie.ui.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.ui.Canvas.Text', {
+com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Canvas.Text', {
 	meta: {
 		text: { type: 'string', defaultValue: '' },
-		fontFamily: { type: 'string', defaultValue: 'Open Sans' },
+		fontFamily: { type: 'string', defaultValue: 'Arial' },
 		fontSize: { type: 'number', defaultValue: 12 },
 		fontStyle: { type: 'string', defaultValue: 'normal' },
-		baseline: { type: 'string', defaultValue: com.nysoft.josie.ui.Canvas.Text.Baseline.Alphabetic }
+		baseline: { type: 'string', defaultValue: com.nysoft.josie.gfx.Canvas.Text.Baseline.Alphabetic }
 	},
 	
 	_prepareFontString: function() {
@@ -24,7 +24,7 @@ com.nysoft.josie.ui.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.ui.Canva
 		this.applyRotation(canvas, iMetric, this.getFontSize());
 		oContext.font = this._prepareFontString();
 		oContext.baseline = this.getBaseline();
-		
+
 		this.applyStrokeSettings(canvas);
 		if(this.isStroked()) {
 			oContext.strokeText(sText, oVector.getX(), oVector.getY());
@@ -32,7 +32,7 @@ com.nysoft.josie.ui.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.ui.Canva
 		
 		this.applyFillSettings(canvas);
 		if(this.isFilled()) {
-			oContext.fillText(sText, oVector.getX(), oVector.getY());			
+			oContext.fillText(sText, oVector.getX(), oVector.getY());
 		}
 		
 		oContext.restore();

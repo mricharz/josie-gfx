@@ -1,6 +1,6 @@
-jQuery.require('com.nysoft.josie.ui.Canvas.StrokeAndFillObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.StrokeAndFillObject');
 
-com.nysoft.josie.ui.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.ui.Canvas.Polygon', {
+com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Canvas.Polygon', {
 	meta: {
 		numberOfSides: { type: 'number', defaultValue: 3 },
 		size: { type: 'number', defaultValue: 10 }
@@ -9,24 +9,26 @@ com.nysoft.josie.ui.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.ui.Canva
 	render: function(canvas) {
 		var oContext =  canvas.getContext(),
 			oVector = this.getVector(),
+            iX = oVector.getX(),
+            iY = oVector.getY(),
 			iSize = this.getSize(),
-			iNumberOfSides = this.getNumberOfSides(),
-			sinZero = 0,
-			cosZero = 0;
-			
+			iNumberOfSides = this.getNumberOfSides();
+
 		oContext.save();
 		oContext.beginPath();
 		this.applyRotation(canvas, iSize, iSize);
-		
-		//go to first edge
-		oContext.moveTo(oVector.getX() + iSize * cosZero, oVector.getY() + iSize * sinZero);          
+
+        //go to first edge
+        oContext.moveTo(iX + iSize * 1, iY + iSize * 0);
 
 		//draw rest of the edges
-		for (var i = 1; i <= iNumberOfSides; i++) {
-			var preCalculation = i * 2 * Math.PI / iNumberOfSides;
-			oContext.lineTo(oVector.getX() + iSize * Math.cos(preCalculation), oVector.getY() + iSize * Math.sin(preCalculation));
+		for (var i = 0; i <= iNumberOfSides; i++) {
+			var preCalculation = i * 2 * Math.PI / iNumberOfSides,
+                x = iX + iSize * Math.cos(preCalculation),
+                y = iY + iSize * Math.sin(preCalculation);
+			oContext.lineTo(x, y);
 		}
-		
+
 		this.applyStrokeSettings(canvas);
 		if(this.isStroked()) {
 			oContext.stroke();

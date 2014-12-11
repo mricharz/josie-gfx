@@ -1,6 +1,6 @@
-jQuery.declare('com.nysoft.josie.ui.Canvas.Text.Style');
+Josie.declare('com.nysoft.josie.gfx.Canvas.Text.Style');
 
-com.nysoft.josie.ui.Canvas.Text.Style = {
+com.nysoft.josie.gfx.Canvas.Text.Style = {
 	Normal: "normal",
 	Bold: "bold",
 	Italic: "italic",

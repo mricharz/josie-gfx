@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+- '0.11'
+before_script:
+- npm install -g gulp
+script: gulp
+notifications:
+  email:
+    recipients:
+      - manuel.richarz@nysoft.de
+      - viktor.zener@gmail.com
+    on_success: change
+    on_failure: always
+deploy:
+  provider: releases
+  api_key:
+    secure: IEzkfxK1fxvGECC2QFqTqvOY7hQWOr0sBG7Tr8OpFeiS7D8gf66rMPUIviUGdbcOEiNWrO2UBoY1FZft89kZrNnaNLtPXr4BY5YRw3L0Y/mRNRXneaS7L657vFF02NNioDQkyRX+8vk7syvgAS0MeSAcqVkEgveoanuJm5TGytI=
+  file: target/josie-gfx.tar.gz
+  on:
+    repo: mricharz/josie-gfx
+    tags: true
+    all_branches: true

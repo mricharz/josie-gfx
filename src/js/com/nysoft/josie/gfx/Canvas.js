@@ -1,75 +1,53 @@
-jQuery.require('com.nysoft.josie.core.Control');
-jQuery.require('css/com/nysoft/josie/ui.css', {dataType: 'stylesheet'});
+Josie.require('com.nysoft.josie.core.Control');
 
-com.nysoft.josie.core.Control.extend('com.nysoft.josie.ui.Canvas', {
+com.nysoft.josie.core.Control.extend('com.nysoft.josie.gfx.Canvas', {
 	meta: {
-		canvas: 'object',
-		background: 'object',
+		content: 'com.nysoft.josie.gfx.Canvas.CanvasObject[]',
 		width: 'number',
 		height: 'number'
 	},
-	
-	init: function(domObject, options) {
-		if(domObject) {
-			this.setDom(domObject);
-		} else {
-			//we need to add this to DOM or we cannot use it
-			jQuery('body').append(this.getDom());
-		}
-		(!this.getId()) && this.setId(jQuery.utils.uniqueId());
-		
-		//update size of canvas
-		this.bindEvent('onAfterRenderer', function() {
-			this._updateSize();
-			window.addEventListener("orientationchange", jQuery.proxy(this._updateSize, this));
-			window.addEventListener("resize", jQuery.proxy(this._updateSize, this));
-		});
-	},
+
+    init: function() {
+        //update size of canvas
+        this.bindEvent('onAfterRenderer', function() {
+            window.addEventListener("orientationchange", jQuery.proxy(this._updateSize, this));
+            window.addEventListener("resize", jQuery.proxy(this._updateSize, this));
+        });
+    },
+
+    _renderControl: function() {
+        if(this.getDom()) {
+            var sContent = '<canvas';
+            sContent += this.writeCssClasses();
+            sContent += this.writeCssStyles();
+            sContent += '></canvas>';
+
+            this.replaceDom(sContent);
+            this._updateSize();
+        }
+        this._super('_renderControl', arguments);
+    },
+
+    _renderContentItem: function(oItem, index) {
+        if(oItem instanceof com.nysoft.josie.gfx.Canvas.CanvasObject) {
+            oItem.render(this, index);
+        }
+    },
 	
 	_updateSize: function() {
-		var parent = this.getDom().parent() || jQuery(window);
-		var innerHeight = parent.innerHeight();
-		var innerWidth = parent.innerWidth();
-		
-		jQuery.log.trace('Canvas::_updateSize', parent, innerHeight, innerWidth);
-		
-		var width = (this.getWidth() >= innerWidth || !this.getWidth()) ? innerWidth : this.getWidth();
-		var height = (this.getHeight() >= innerHeight || !this.getHeight()) ? innerHeight : this.getHeight();
-		
-		this.getDom().css('height', height);
-		this.getDom().css('width', width);
-		this.getCanvas().get(0).height = height;
-		this.getCanvas().get(0).width = width;
-	},
+		var jqDom = this.getDom(),
+            jqParent = this.getDom().parent() || jQuery(window),
+		    iInnerHeight = jqParent.innerHeight(),
+		    iInnerWidth = jqParent.innerWidth();
+
+        Josie.log.trace('Canvas::_updateSize', jqParent, iInnerHeight, iInnerWidth);
+
+        jqDom.get(0).width = (this.getWidth() >= iInnerWidth || !this.getWidth()) ? iInnerWidth : this.getWidth();
+        jqDom.get(0).height = (this.getHeight() >= iInnerHeight || !this.getHeight()) ? iInnerHeight : this.getHeight();
+    },
 	
 	destroy: function() {
-		delete this.getContext();
-		delete this.getCanvas();
 		this.getDom().remove();
-	},
-	
-	_renderControl: function() {
-		jQuery.log.trace('Canvas::renderControl');
-		//setting id to domObject
-		this.getDom().attr('id', this.getId());
-		//add canvas-CSSClass
-		if(!this.getDom().hasClass('canvas'))
-			this.getDom().addClass('canvas');
-		//create background domObject
-		this._renderBackground();
-		//create canvas domObject
-		this.setCanvas(jQuery('<canvas id="'+this.getId()+'-canvas" />'));
-		this.getDom().append(this.getCanvas());
-	},
-	
-	_renderBackground: function() {
-		if(!this.getBackground()) {
-			this.setBackground(jQuery('<div id="'+this.getId()+'-bg" class="canvas-background" />'));
-		} else {
-			if(!this.getBackground().hasClass('canvas-background')) {
-				this.getBackground().addClass('canvas-background');
-			}
-		}
-		this.getDom().append(this.getBackground());
 	}
+
 });

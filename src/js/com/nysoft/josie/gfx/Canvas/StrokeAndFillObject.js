@@ -1,12 +1,12 @@
-jQuery.require('com.nysoft.josie.ui.Canvas.CanvasObject');
-jQuery.require('com.nysoft.josie.ui.Canvas.Type');
+Josie.require('com.nysoft.josie.gfx.Canvas.CanvasObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.Type');
 
-com.nysoft.josie.ui.Canvas.CanvasObject.extend('com.nysoft.josie.ui.Canvas.StrokeAndFillObject', {
+com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.StrokeAndFillObject', {
 	meta: {
 		borderColor: { type: 'string', defaultValue: '#000000' },
 		borderWidth: { type: 'number', defaultValue: 1 },
 		fillColor: { type: 'string', defaultValue: '#ffffff' },
-		type: { type: 'string', defaultValue: com.nysoft.josie.ui.Canvas.Type.Fill }
+		type: { type: 'string', defaultValue: com.nysoft.josie.gfx.Canvas.Type.Fill }
 	},
 	
 	applyStrokeSettings: function(canvas) {
@@ -19,7 +19,7 @@ com.nysoft.josie.ui.Canvas.CanvasObject.extend('com.nysoft.josie.ui.Canvas.Strok
 	
 	applyFillSettings: function(canvas) {
 		if(this.isFilled()) {
-			canvas.getContext().fillStyle = this.getFillColor();	
+            canvas.getContext().fillStyle = this.getFillColor();
 		} else {
 			canvas.getContext().fillStyle = null;
 		}
@@ -31,5 +31,5 @@ com.nysoft.josie.ui.Canvas.CanvasObject.extend('com.nysoft.josie.ui.Canvas.Strok
 	
 	isFilled: function() {
 		return (this.getType().indexOf('fill')>=0);
-	},
+	}
 });

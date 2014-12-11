@@ -1,59 +1,62 @@
-jQuery.require('com.nysoft.josie.core.BaseObject');
-jQuery.require('com.nysoft.josie.ui.Canvas.Container');
+Josie.require('com.nysoft.josie.core.BaseObject');
+Josie.require('com.nysoft.josie.gfx.Canvas2D');
+Josie.require('com.nysoft.josie.gfx.Canvas.Container');
 
-com.nysoft.josie.ui.Canvas.Container.extend('com.nysoft.josie.ui.Canvas.Model', {
+com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model', {
 	meta: {
 		preRender: { type: 'boolean', defaultValue: true },
 		width: 'number',
 		height: 'number'
 	},
-	
-	hasToPreRender: function() {
-		return this.getPreRender();
-	},
-	
-	_preRender: function() {
-		if(!this._bPreRendered) {
-			jQuery.log.trace('PreRendering Model: '+this.getId());
-			var preRenderCanvas = this.getPreRenderCanvas();
-			jQuery.each(this.getObjects(), function() {
-				this.render(preRenderCanvas);
-			});
-			this._bPreRendered = true;
-		}
-	},
-	
-	getAsImage: function() {
-		if(!this.image) {
-			this._preRender();
-			this.image = new Image();
-			this.image.id = this.getId()+'-image';
-			this.image.src = this.getPreRenderCanvas().getCanvas().get(0).toDataURL();
-		}
-		return this.image;
-	},
-	
-	getPreRenderCanvas: function(canvas) {
-		if(!this._preRenderCanvas) {
-			this._preRenderCanvas = new com.nysoft.josie.ui.Canvas2D(null, {
-				width: this.getWidth(),
-				height: this.getHeight()
-			});
-		}
-		return this._preRenderCanvas;
-	},
-	
+
+    init: function() {
+        if(this.getPreRender()) {
+            this.jqPreRenderCanvas = jQuery('<div />');
+            jQuery('body').append(this.jqPreRenderCanvas);
+            //create the prerender canvas
+            this._preRenderCanvas = new com.nysoft.josie.gfx.Canvas2D(this.jqPreRenderCanvas, {
+                width: this.getWidth(),
+                height: this.getHeight(),
+                content: this.getContent(),
+                visible: false
+            });
+            this._preRenderedCanvas = null;
+            //if preRender is done
+            this._preRenderCanvas.bindEvent('onAfterRenderer', function(e, oData) {
+                oData.model._preRenderedCanvas = oData.model.getPreRenderCanvas().getDom().get(0);
+                oData.model.trigger('onPreRenderDone');
+            }, { model: this });
+        }
+    },
+
+    getPreRenderCanvas: function() {
+        return this._preRenderCanvas;
+    },
+
 	render: function(canvas) {
-		if(this.hasToPreRender()) {
-			this._preRender();
-			var oContext = canvas.getContext(),
-				oVector = this.getVector();
-			oContext.save();
-			this.applyRotation(canvas, this.getWidth(), this.getHeight());
-			//draw prerendered image
-			oContext.drawImage(this.getPreRenderCanvas().getCanvas().get(0), oVector.getX(), oVector.getY());
-			oContext.restore();
+		if(this.getPreRender()) {
+            Josie.log.info('Render Model with prerender');
+            var oPreRenderCanvas = this.getPreRenderCanvas(),
+                oContext = canvas.getContext(),
+                oVector = this.getVector(),
+                iWidth = this.getWidth(),
+                iHeight = this.getHeight();
+
+            this.unbindEvent('onPreRenderDone');
+            this.bindEvent('onPreRenderDone', jQuery.proxy(function() {
+                if(this._preRenderedCanvas) {
+                    Josie.log.info('Prerender is done!');
+                    oContext.save();
+                    this.applyRotation(canvas, iWidth, iHeight);
+                    //draw prerendered image
+                    oContext.drawImage(this._preRenderedCanvas, oVector.getX(), oVector.getY(), iWidth, iHeight);
+                    oContext.restore();
+                }
+            }, this));
+            oPreRenderCanvas.setContent(this.getContent());
+            oPreRenderCanvas.rerender();
 		} else {
+            Josie.log.info('Render Model without prerender');
 			this._super('render', canvas);
 		}
 	}

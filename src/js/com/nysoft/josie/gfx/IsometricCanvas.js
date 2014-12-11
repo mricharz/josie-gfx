@@ -1,7 +1,7 @@
-jQuery.require('com.nysoft.josie.ui.Canvas2D');
-jQuery.require('com.nysoft.josie.ui.Canvas.Direction');
+Josie.require('com.nysoft.josie.gfx.Canvas2D');
+Josie.require('com.nysoft.josie.gfx.Canvas.Direction');
 
-com.nysoft.josie.ui.Canvas2D.extend('com.nysoft.josie.ui.IsometricCanvas', {
+com.nysoft.josie.gfx.Canvas2D.extend('com.nysoft.josie.ui.IsometricCanvas', {
 	
 	meta: {
 		tileWidth: 'number',
@@ -14,9 +14,9 @@ com.nysoft.josie.ui.Canvas2D.extend('com.nysoft.josie.ui.IsometricCanvas', {
 	
 	renderObjects: function() {
 		jQuery.each(this.getObjects(), jQuery.proxy(function(iRowIndex, aColumns) {
-			jQuery.log.trace('Drawing Row: '+iRowIndex);
+			Josie.log.trace('Drawing Row: '+iRowIndex);
 			jQuery.each(aColumns, jQuery.proxy(function(iColumnIndex, oColumnObject) {
-				jQuery.log.trace('Drawing Column: '+iColumnIndex);
+				Josie.log.trace('Drawing Column: '+iColumnIndex);
 				this._renderPosition(iRowIndex, iColumnIndex);
 			}, this));
 		}, this));
@@ -47,7 +47,7 @@ com.nysoft.josie.ui.Canvas2D.extend('com.nysoft.josie.ui.IsometricCanvas', {
 	},
 	
 	_calculateCoordinate: function(iRowIndex, iColumnIndex) {
-		return new com.nysoft.josie.ui.Canvas.Vector(
+		return new com.nysoft.josie.gfx.Canvas.Vector(
 			iColumnIndex*this.getTileWidth(),
 			iRowIndex*this.getTileHeight()
 		);
@@ -66,28 +66,28 @@ com.nysoft.josie.ui.Canvas2D.extend('com.nysoft.josie.ui.IsometricCanvas', {
 	
 	_getDirectionChanges: function(sDirection) {
 		switch(sDirection) {
-		case com.nysoft.josie.ui.Canvas.Direction.North:
+		case com.nysoft.josie.gfx.Canvas.Direction.North:
 			return { row: -1, column: 0 };
 			break;
-		case com.nysoft.josie.ui.Canvas.Direction.NorthEast:
+		case com.nysoft.josie.gfx.Canvas.Direction.NorthEast:
 			return { row: -1, column: 1 };
 			break;
-		case com.nysoft.josie.ui.Canvas.Direction.East:
+		case com.nysoft.josie.gfx.Canvas.Direction.East:
 			return { row: 0, column: 1 };			
 			break;
-		case com.nysoft.josie.ui.Canvas.Direction.SouthEast:
+		case com.nysoft.josie.gfx.Canvas.Direction.SouthEast:
 			return { row: 1, column: 1 };
 			break;
-		case com.nysoft.josie.ui.Canvas.Direction.South:
+		case com.nysoft.josie.gfx.Canvas.Direction.South:
 			return { row: 1, column: 0 };
 			break;
-		case com.nysoft.josie.ui.Canvas.Direction.SouthWest:
+		case com.nysoft.josie.gfx.Canvas.Direction.SouthWest:
 			return { row: 1, column: -1 };
 			break;
-		case com.nysoft.josie.ui.Canvas.Direction.West:
+		case com.nysoft.josie.gfx.Canvas.Direction.West:
 			return { row: 0, column: -1 };
 			break;
-		case com.nysoft.josie.ui.Canvas.Direction.NorthWest:
+		case com.nysoft.josie.gfx.Canvas.Direction.NorthWest:
 			return { row: -1, column: -1 };
 			break;
 		}

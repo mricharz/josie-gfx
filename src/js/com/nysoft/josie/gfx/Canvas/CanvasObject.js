@@ -1,17 +1,35 @@
-jQuery.require('com.nysoft.josie.core.BaseObject');
-jQuery.require('com.nysoft.josie.ui.Canvas.Vector');
+Josie.require('com.nysoft.josie.core.BaseObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.Vector');
 
-com.nysoft.josie.core.BaseObject.extend('com.nysoft.josie.ui.Canvas.CanvasObject', {
+com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.CanvasObject', {
 	meta: {
 		id: 'string',
-		vector: { type: 'object', defaultValue: new com.nysoft.josie.ui.Canvas.Vector(0, 0) },
+		vector: { type: 'com.nysoft.josie.gfx.Canvas.Vector', defaultValue: new com.nysoft.josie.gfx.Canvas.Vector(0, 0) },
+        x: 'number',
+        y: 'number',
 		rotation: { type: 'number', defaultValue: 0 },
-		rotationPoint: { type: 'object', defaultValue: null }
+		rotationPoint: { type: 'com.nysoft.josie.gfx.Canvas.Vector', defaultValue: null }
 	},
-	
-	init: function(options) {
-		this.setProperties(options);
-	},
+
+    getX: function() {
+        return this.getVector().getX();
+    },
+
+    getY: function() {
+        return this.getVector().getY();
+    },
+
+    setX: function(value) {
+        if(typeof value === 'number') {
+            this.getVector().setX(value);
+        }
+    },
+
+    setY: function(value) {
+        if(typeof value === 'number') {
+            this.getVector().setY(value);
+        }
+    },
 	
 	addRotation: function(value) {
 		if(typeof value == 'number') {
@@ -35,15 +53,16 @@ com.nysoft.josie.core.BaseObject.extend('com.nysoft.josie.ui.Canvas.CanvasObject
 			tx = oRotationPoint.getX();
 			ty = oRotationPoint.getY();
 		} else {
+            Josie.log.debug(oVector);
 			tx = oVector.getX()+width/2;
 			ty = oVector.getY()+height/2;
 		}
 		oContext.translate(tx, ty);
-		oContext.rotate(jQuery.utils.deg2rad(this.getRotation()));
+		oContext.rotate(Josie.utils.deg2rad(this.getRotation()));
 		oContext.translate(-tx, -ty);
 	},
 	
-	render: function() {},
+	render: function(canvas, index) {},
 	
 	animate: function(canvas, callback) {
 		if(jQuery.isFunction(callback)) {

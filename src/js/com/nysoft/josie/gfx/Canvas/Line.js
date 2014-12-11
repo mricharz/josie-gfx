@@ -1,6 +1,6 @@
-jQuery.require('com.nysoft.josie.ui.Canvas.CanvasObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.CanvasObject');
 
-com.nysoft.josie.ui.Canvas.CanvasObject.extend('com.nysoft.josie.ui.Canvas.Line', {
+com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Line', {
 	meta: {
 		length: { type: 'number', defaultValue: 0 },
 		lineWidth: { type: 'number', defaultValue: 1 },
@@ -8,7 +8,7 @@ com.nysoft.josie.ui.Canvas.CanvasObject.extend('com.nysoft.josie.ui.Canvas.Line'
 	},
 	
 	calculateTargetVector: function() {
-		var targetVector = new com.nysoft.josie.ui.Canvas.Vector(this.getVector().getX()+this.getLength(), this.getVector().getY());
+		var targetVector = new com.nysoft.josie.gfx.Canvas.Vector(this.getVector().getX()+this.getLength(), this.getVector().getY());
 		return targetVector.rotate(this.getVector(), this.getRotation());
 	},
 	

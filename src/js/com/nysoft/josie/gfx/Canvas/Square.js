@@ -1,18 +1,19 @@
-jQuery.require('com.nysoft.josie.ui.Canvas.StrokeAndFillObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.StrokeAndFillObject');
 
-com.nysoft.josie.ui.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.ui.Canvas.Square', {
+com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Canvas.Square', {
 	meta: {
 		width: { type: 'number', defaultValue: 10 }
 	},
 	
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
-			oVector = this.getVector();
+			oVector = this.getVector(),
+            iWidth = this.getWidth();
 		
 		oContext.save();
 		oContext.beginPath();
-		this.applyRotation(canvas, this.getWidth(), this.getWidth());
-		oContext.rect(oVector.getX(), oVector.getY(), this.getWidth(), this.getWidth());
+		this.applyRotation(canvas, iWidth, iWidth);
+		oContext.rect(oVector.getX(), oVector.getY(), iWidth, iWidth);
 		
 		this.applyStrokeSettings(canvas);
 		if(this.isStroked()) {

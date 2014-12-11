@@ -1,6 +1,6 @@
-jQuery.declare('com.nysoft.josie.ui.Canvas.Text.Baseline');
+Josie.declare('com.nysoft.josie.gfx.Canvas.Text.Baseline');
 
-com.nysoft.josie.ui.Canvas.Text.Baseline = {
+com.nysoft.josie.gfx.Canvas.Text.Baseline = {
 	Top: "top",
 	Bottom: "bottom",
 	Middle: "middle",

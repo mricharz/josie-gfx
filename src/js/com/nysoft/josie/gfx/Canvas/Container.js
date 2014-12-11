@@ -1,43 +1,38 @@
-jQuery.require('com.nysoft.josie.core.BaseObject');
-jQuery.require('com.nysoft.josie.ui.Canvas.Vector');
+Josie.require('com.nysoft.josie.core.BaseObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.Vector');
 
-com.nysoft.josie.ui.Canvas.CanvasObject.extend('com.nysoft.josie.ui.Canvas.Container', {
+com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Container', {
 	
 	meta: {
-		objects: { type: 'object', defaultValue: [] }
+		content: { type: 'com.nysoft.josie.gfx.Canvas.CanvasObject[]', defaultValue: [] }
 	},
 	
 	addObjects: function(oObject) {
-		return this.getObjects().push(oObject) - 1;
+		return this.getContent().push(oObject) - 1;
 	},
 	
 	removeObjectByIndex: function(iIndex) {
-		this.setObjects(this.getObjects().splice(iIndex, 1));
+		this.setContent(this.getContent().splice(iIndex, 1));
 	},
 	
 	size: function() {
-		return this.getObjects().length;
+		return this.getContent().length;
 	},
 	
 	render: function(canvas) {
 		var oVector = this.getVector(),
-			containerVector = oVector.toPlainObject(),
-			containerRotation = this.getProperty('rotation');
-		jQuery.each(this.getObjects(), function() {
-			var saveVector = oVector.toPlainObject();
-			//apply vector
-			oVector.setX(saveVector.x+containerVector.x);
-			oVector.setY(saveVector.y+containerVector.y);
+			oRotation = this.getRotation();
+		Josie.utils.each(this.getContent(), function(oObject) {
+            oObject.setVector(oObject.getVector().add(oVector));
 			//apply rotation
-			var saveRotation = this.getProperty('rotation');
-			this.addRotation(containerRotation);
+			var saveRotation = oObject.getRotation();
+            oObject.addRotation(oRotation);
 			//render
-			this.render(canvas);
+            oObject.render(canvas);
 			//reset rotation
-			this.setProperty('rotation', saveRotation);
+            oObject.setRotation(saveRotation);
 			//reset vector
-			oVector.setX(saveVector.x);
-			oVector.setY(saveVector.y);
+            oObject.getVector().substract(oVector);
 		});
 	}
 	

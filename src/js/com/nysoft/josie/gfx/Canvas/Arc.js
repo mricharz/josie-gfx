@@ -1,6 +1,6 @@
-jQuery.require('com.nysoft.josie.ui.Canvas.Circle');
+Josie.require('com.nysoft.josie.gfx.Canvas.Circle');
 
-com.nysoft.josie.ui.Canvas.Circle.extend('com.nysoft.josie.ui.Canvas.Arc', {
+com.nysoft.josie.gfx.Canvas.Circle.extend('com.nysoft.josie.gfx.Canvas.Arc', {
 	meta: {
 		beginDegrees: { type: 'number', defaultValue: 0 },
 		endDegrees: { type: 'number', defaultValue: 0 }
@@ -8,11 +8,13 @@ com.nysoft.josie.ui.Canvas.Circle.extend('com.nysoft.josie.ui.Canvas.Arc', {
 	
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
-			oVector = this.getVector();
+			oVector = this.getVector(),
+            iWidth = this.getWidth();
+
 		oContext.save();
 		oContext.beginPath();
-		this.applyRotation(canvas, this.getWidth(), this.getWidth());
-		oContext.arc(oVector.getX(), oVector.getY(), this.getWidth(), jQuery.utils.deg2rad(this.getBeginDegrees()), jQuery.utils.deg2rad(this.getEndDegrees()), false);
+		this.applyRotation(canvas, iWidth, iWidth);
+		oContext.arc(oVector.getX(), oVector.getY(), iWidth, Josie.utils.deg2rad(this.getBeginDegrees()), Josie.utils.deg2rad(this.getEndDegrees()), false);
 		
 		this.applyStrokeSettings(canvas);
 		if(this.isStroked()) {

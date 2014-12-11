@@ -1,9 +1,9 @@
-jQuery.require('com.nysoft.josie.ui.Canvas.CanvasObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.CanvasObject');
 
 //TODO
 //see: http://www.html5canvastutorials.com/tutorials/html5-canvas-paths/
 
-com.nysoft.josie.ui.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.ui.Canvas.Path', {
+com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Canvas.Path', {
 	
 	meta: {
 		nodes: { type: 'object', defaultValue: [] },

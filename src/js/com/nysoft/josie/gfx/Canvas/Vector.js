@@ -1,27 +1,27 @@
-jQuery.require('com.nysoft.josie.core.BaseObject');
+Josie.require('com.nysoft.josie.core.BaseObject');
 
-com.nysoft.josie.core.BaseObject.extend('com.nysoft.josie.ui.Canvas.Vector', {
+com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector', {
 	meta: {
 		x: { type: 'number', defaultValue: 0 },
 		y: { type: 'number', defaultValue: 0 }
 	},
 	
 	add: function(vector) {
-		return new com.nysoft.josie.ui.Canvas.Vector(
+		return new com.nysoft.josie.gfx.Canvas.Vector(
 				this.getX()+vector.getX(),
 				this.getY()+vector.getY()
 				);
 	},
 	
 	substract: function(vector) {
-		return new com.nysoft.josie.ui.Canvas.Vector(
+		return new com.nysoft.josie.gfx.Canvas.Vector(
 				this.getX()-vector.getX(),
 				this.getY()-vector.getY()
 				);
 	},
 	
 	multiply: function(vector) {
-		return new com.nysoft.josie.ui.Canvas.Vector(
+		return new com.nysoft.josie.gfx.Canvas.Vector(
 				this.getX()*vector.getX(),
 				this.getY()*vector.getY()
 				);
@@ -47,9 +47,9 @@ com.nysoft.josie.core.BaseObject.extend('com.nysoft.josie.ui.Canvas.Vector', {
 		//get angle
 		var iAngle = divV.angle();
 		//change angle
-		iAngle += jQuery.utils.deg2rad(iDeg);
+		iAngle += Josie.utils.deg2rad(iDeg);
 		//polar to cartesian
-		newVect = new com.nysoft.josie.ui.Canvas.Vector(
+		newVect = new com.nysoft.josie.gfx.Canvas.Vector(
 			iLength * Math.cos(iAngle),
 			iLength * Math.sin(iAngle)
 		);
