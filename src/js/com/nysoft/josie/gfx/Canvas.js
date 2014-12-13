@@ -4,15 +4,16 @@ com.nysoft.josie.core.Control.extend('com.nysoft.josie.gfx.Canvas', {
 	meta: {
 		content: 'com.nysoft.josie.gfx.Canvas.CanvasObject[]',
 		width: 'number',
-		height: 'number'
+		height: 'number',
+        autoResize: { type: 'boolean', defaultValue: true }
 	},
 
     init: function() {
         //update size of canvas
-        this.bindEvent('onAfterRenderer', function() {
+        if(this.getAutoResize() && this.getVisible()) {
             window.addEventListener("orientationchange", jQuery.proxy(this._updateSize, this));
             window.addEventListener("resize", jQuery.proxy(this._updateSize, this));
-        });
+        }
     },
 
     _renderControl: function() {
@@ -36,7 +37,7 @@ com.nysoft.josie.core.Control.extend('com.nysoft.josie.gfx.Canvas', {
 	
 	_updateSize: function() {
 		var jqDom = this.getDom(),
-            jqParent = this.getDom().parent() || jQuery(window),
+            jqParent = jqDom.parent() || jQuery(window),
 		    iInnerHeight = jqParent.innerHeight(),
 		    iInnerWidth = jqParent.innerWidth();
 

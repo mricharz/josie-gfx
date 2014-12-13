@@ -18,7 +18,8 @@ com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model'
                 width: this.getWidth(),
                 height: this.getHeight(),
                 content: this.getContent(),
-                visible: false
+                visible: false,
+                autoResize: false
             });
             this._preRenderedCanvas = null;
             //if preRender is done
@@ -33,31 +34,41 @@ com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model'
         return this._preRenderCanvas;
     },
 
+    invalidate: function() {
+        //set preRenderedCanvas to null to force a rerender
+        this._preRenderedCanvas = null;
+    },
+
 	render: function(canvas) {
 		if(this.getPreRender()) {
-            Josie.log.info('Render Model with prerender');
-            var oPreRenderCanvas = this.getPreRenderCanvas(),
-                oContext = canvas.getContext(),
+            var oPreRenderCanvas = this.getPreRenderCanvas();
+
+            if(!this._preRenderedCanvas) {
+                this.bindEvent('onPreRenderDone', jQuery.proxy(function () {
+                    this._renderPrerenderedImage(canvas);
+                }, this));
+                oPreRenderCanvas.setContent(this.getContent());
+                oPreRenderCanvas.rerender();
+            } else {
+                this._renderPrerenderedImage(canvas);
+            }
+		} else {
+			this._super('render', canvas);
+		}
+	},
+
+    _renderPrerenderedImage: function(canvas) {
+        if(this._preRenderedCanvas) {
+            var oContext = canvas.getContext(),
                 oVector = this.getVector(),
                 iWidth = this.getWidth(),
                 iHeight = this.getHeight();
-
+            oContext.save();
+            this.applyRotation(canvas, iWidth, iHeight);
+            //draw prerendered image
+            oContext.drawImage(this._preRenderedCanvas, oVector.getX(), oVector.getY(), iWidth, iHeight);
+            oContext.restore();
             this.unbindEvent('onPreRenderDone');
-            this.bindEvent('onPreRenderDone', jQuery.proxy(function() {
-                if(this._preRenderedCanvas) {
-                    Josie.log.info('Prerender is done!');
-                    oContext.save();
-                    this.applyRotation(canvas, iWidth, iHeight);
-                    //draw prerendered image
-                    oContext.drawImage(this._preRenderedCanvas, oVector.getX(), oVector.getY(), iWidth, iHeight);
-                    oContext.restore();
-                }
-            }, this));
-            oPreRenderCanvas.setContent(this.getContent());
-            oPreRenderCanvas.rerender();
-		} else {
-            Josie.log.info('Render Model without prerender');
-			this._super('render', canvas);
-		}
-	}
+        }
+    }
 });

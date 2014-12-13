@@ -4,82 +4,77 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 	meta: {
 		context: 'object',
 		measureCallback: 'function',
-		measurement: 'boolean'
+		measurement: { type: 'boolean', defaultValue: false }
 	},
-	
-	_renderControl: function() {
+
+	init: function() {
+		this._super('init', arguments);
+
 		//init loops
 		this.loops = {};
 		//start animationLooping
 		this._animationLoop();
-
-        if(this.getMeasurement()) {
-            //init for performance measurement
-            this.fps = 0;
-            this.now = null;
-            this.lastUpdate = (new Date) * 1 - 1;
-            this.fpsFilter = 50; //highcap
-        }
-
-        this._super('_renderControl', arguments);
 	},
 
+	setMeasurement: function(value) {
+		if(typeof value === 'boolean') {
+			this.setProperty('measurement', value);
+			//init for performance measurement
+			this.fps = 0;
+			this.now = null;
+			this.lastUpdate = (new Date) * 1 - 1;
+			this.fpsFilter = 50; //highcap
+		}
+	},
+
+	_updateSize: function() {
+		this._super('_updateSize', arguments);
+		this.invalidate();
+	},
+	
     getContext: function() {
         var oContext = this.getProperty('context');
         if(!oContext && this.getDom().length) {
-            oContext = this.getDom().get(0).getContext('2d');
-            this.setProperty('context', oContext);
+			oContext = this.getDom().get(0).getContext('2d');
+            this.setContext(oContext);
         }
         return oContext;
     },
 	
-	getObject: function(iIndex) {
-		var aObjects = this.getContent();
-		return aObjects[iIndex] || null;
-	},
-	
-	addObject: function(object) {
-		return this.getContent().push(object)-1;
-	},
-	
-	addObjects: function(aObjects) {
-		var aIds = [];
-		if(aObjects && aObjects.length) {
-			jQuery.each(aObjects, jQuery.proxy(function(index, oObject){
-				aIds.push(this.addObject(oObject));
-			}, this));
+	getContent: function(iIndex) {
+		var aContent = this._super('getContent');
+		if(iIndex !== null && iIndex !== undefined) {
+			return aContent[iIndex] || null;
 		}
-		return aIds;
+		return aContent;
 	},
 	
 	clearCanvas: function() {
+		var oContext = this.getContext(),
+			canvas = this.getDom().get(0);
 		// Store the current transformation matrix
-		this.getContext().save();
+		oContext.save();
 
 		// Use the identity matrix while clearing the canvas
-		this.getContext().setTransform(1, 0, 0, 1, 0, 0);
-		this.getContext().clearRect(0, 0, this.getDom().get(0).width, this.getDom().get(0).height);
+		oContext.setTransform(1, 0, 0, 1, 0, 0);
+		oContext.clearRect(0, 0, canvas.width, canvas.height);
 
 		// Restore the transform
-		this.getContext().restore();
+		oContext.restore();
 	},
 	
-	renderObjects: function() {
+	_renderContent: function() {
 		var aObjects = this.getContent();
 		if(aObjects && aObjects.length) {
 			Josie.utils.each(aObjects, jQuery.proxy(function(oObject, index) {
 				this._renderContentItem(oObject, index);
 			}, this));
 		}
-	},
-	
-	_renderContent: function() {
-		this.renderObjects();
 		if(this.getMeasurement()) {
             this._measureFrame();
         }
 	},
-	
+
 	rerender: function() {
         this.trigger('onBeforeRenderer');
 		this.clearCanvas();
@@ -123,7 +118,7 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 		if(this.loops) {
 			var bHaveToRerender = false;
 			//execute loops
-			Josie.utils.each(this.loops, jQuery.proxy(function(key, fnAnimation) {
+			jQuery.each(this.loops, jQuery.proxy(function(key, fnAnimation) {
 				Josie.log.trace('Running canvas-Loop: '+key);
 				fnAnimation.call(this, key);
 				bHaveToRerender = true;

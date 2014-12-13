@@ -51,6 +51,16 @@
 <div data-class="gfx.Canvas2D" data-id="canvas">
 
     <!--
+        FPS Measurement
+        INFO: Only works if there is some animation-loop-function registred in canvas
+    -->
+    <div data-class="gfx.Canvas.Debug.FPS" data-fill-color="#ff0000">
+        <div data-property="vector">
+            <div data-class="gfx.Canvas.Vector" data-x="0" data-y="10"></div>
+        </div>
+    </div>
+
+    <!--
         Text
     -->
     <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00" data-font-style="bold">

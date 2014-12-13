@@ -1,4 +1,4 @@
-Josie.require('com.nysoft.josie.core.BaseObject');
+Josie.require('com.nysoft.josie.gfx.Canvas.CanvasObject');
 Josie.require('com.nysoft.josie.gfx.Canvas.Vector');
 
 com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Container', {
@@ -32,7 +32,7 @@ com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Con
 			//reset rotation
             oObject.setRotation(saveRotation);
 			//reset vector
-            oObject.getVector().substract(oVector);
+			oObject.setVector(oObject.getVector().substract(oVector));
 		});
 	}
 	
