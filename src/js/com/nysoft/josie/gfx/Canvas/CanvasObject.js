@@ -36,6 +36,12 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.CanvasOb
 			this.setProperty('rotation', this.getProperty('rotation') + value);
 		}
 	},
+
+	substractRotation: function(value) {
+		if(typeof value == 'number') {
+			this.setProperty('rotation', this.getProperty('rotation') - value);
+		}
+	},
 	
 	moveToVector: function(canvas) {
 		var oVector = this.getVector();
@@ -53,7 +59,6 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.CanvasOb
 			tx = oRotationPoint.getX();
 			ty = oRotationPoint.getY();
 		} else {
-            Josie.log.debug(oVector);
 			tx = oVector.getX()+width/2;
 			ty = oVector.getY()+height/2;
 		}

@@ -11,15 +11,18 @@ com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Ima
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
 			oVector = this.getVector(),
-			sSource = this.getSource(),
             iWidth = this.getWidth(),
             iHeight = this.getHeight();
 
-        this._image = this._openImage(sSource, function () {
-            iHeight = iHeight || this.height;
-            iWidth = iWidth || this.width;
-            canvas.drawImage(this, oVector, iWidth, iHeight);
-        });
+        if(!this._image) {
+            this._image = this._openImage(this.getSource(), function () {
+                iHeight = iHeight || this.height;
+                iWidth = iWidth || this.width;
+                canvas.drawImage(this, oVector, iWidth, iHeight);
+            });
+        } else {
+            canvas.drawImage(this._image, oVector, iWidth, iHeight);
+        }
 	},
 
     _openImage: function(file, callback) {

@@ -9,27 +9,28 @@ com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Str
 		type: { type: 'string', defaultValue: com.nysoft.josie.gfx.Canvas.Type.Fill }
 	},
 	
-	applyStrokeSettings: function(canvas) {
+	applyStrokeSettings: function(oContext) {
 		if(this.isStroked()) {
-			var oContext = canvas.getContext();
 			oContext.lineWidth = this.getBorderWidth();
 			oContext.strokeStyle = this.getBorderColor();
+			oContext.stroke();
 		}
 	},
 	
-	applyFillSettings: function(canvas) {
+	applyFillSettings: function(oContext) {
 		if(this.isFilled()) {
-            canvas.getContext().fillStyle = this.getFillColor();
+			oContext.fillStyle = this.getFillColor();
+			oContext.fill();
 		} else {
-			canvas.getContext().fillStyle = null;
+			oContext.fillStyle = null;
 		}
 	},
 	
 	isStroked: function() {
-		return (this.getType().indexOf('stroke')>=0);
+		return /(stroke)/i.test(this.getType());
 	},
 	
 	isFilled: function() {
-		return (this.getType().indexOf('fill')>=0);
+		return /(fill)/i.test(this.getType());
 	}
 });

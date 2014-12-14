@@ -20,15 +20,8 @@ com.nysoft.josie.gfx.Canvas.Circle.extend('com.nysoft.josie.gfx.Canvas.Elipsis',
         oContext.restore(); // restore to original state
         oContext.save();
 
-        this.applyStrokeSettings(canvas);
-        if(this.isStroked()) {
-            oContext.stroke();
-        }
-
-        this.applyFillSettings(canvas);
-        if(this.isFilled()) {
-            oContext.fill();
-        }
+        this.applyStrokeSettings(oContext);
+        this.applyFillSettings(oContext);
 
         oContext.closePath();
         oContext.restore();

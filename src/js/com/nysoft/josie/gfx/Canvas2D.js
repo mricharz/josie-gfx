@@ -50,14 +50,13 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 	},
 	
 	clearCanvas: function() {
-		var oContext = this.getContext(),
-			canvas = this.getDom().get(0);
+		var oContext = this.getContext();
 		// Store the current transformation matrix
 		oContext.save();
 
 		// Use the identity matrix while clearing the canvas
 		oContext.setTransform(1, 0, 0, 1, 0, 0);
-		oContext.clearRect(0, 0, canvas.width, canvas.height);
+		oContext.clearRect(0, 0, this.width, this.height);
 
 		// Restore the transform
 		oContext.restore();
@@ -119,7 +118,6 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 			var bHaveToRerender = false;
 			//execute loops
 			jQuery.each(this.loops, jQuery.proxy(function(key, fnAnimation) {
-				Josie.log.trace('Running canvas-Loop: '+key);
 				fnAnimation.call(this, key);
 				bHaveToRerender = true;
 			}, this));

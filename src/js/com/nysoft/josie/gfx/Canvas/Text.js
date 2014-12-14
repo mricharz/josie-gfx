@@ -10,11 +10,32 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 		fontStyle: { type: 'string', defaultValue: 'normal' },
 		baseline: { type: 'string', defaultValue: com.nysoft.josie.gfx.Canvas.Text.Baseline.Alphabetic }
 	},
-	
+
 	_prepareFontString: function() {
-		return this.getFontStyle() + ' ' + this.getFontSize() + 'px ' + this.getFontFamily();
+		this.font = this.getFontStyle() + ' ' + this.getFontSize() + 'px ' + this.getFontFamily();
 	},
-	
+
+	setFontStyle: function(value) {
+		if(typeof value === 'string') {
+			this.setProperty('fontStyle', value);
+			this._prepareFontString();
+		}
+	},
+
+	setFontFamily: function(value) {
+		if(typeof value === 'string') {
+			this.setProperty('fontFamily', value);
+			this._prepareFontString();
+		}
+	},
+
+	setFontSize: function(value) {
+		if(typeof value === 'number') {
+			this.setProperty('fontSize', value);
+			this._prepareFontString();
+		}
+	},
+
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
 			oVector = this.getVector(),
@@ -22,19 +43,29 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 		oContext.save();
 		var iMetric = oContext.measureText(sText);
 		this.applyRotation(canvas, iMetric, this.getFontSize());
-		oContext.font = this._prepareFontString();
+		oContext.font = this.font;
 		oContext.baseline = this.getBaseline();
 
-		this.applyStrokeSettings(canvas);
+		this.applyStrokeSettings(oContext, oVector, sText);
+		this.applyFillSettings(oContext, oVector, sText);
+
+		oContext.restore();
+	},
+
+	applyStrokeSettings: function(oContext, oVector, sText) {
 		if(this.isStroked()) {
+			oContext.lineWidth = this.getBorderWidth();
+			oContext.strokeStyle = this.getBorderColor();
 			oContext.strokeText(sText, oVector.getX(), oVector.getY());
 		}
-		
-		this.applyFillSettings(canvas);
+	},
+
+	applyFillSettings: function(oContext, oVector, sText) {
 		if(this.isFilled()) {
+			oContext.fillStyle = this.getFillColor();
 			oContext.fillText(sText, oVector.getX(), oVector.getY());
+		} else {
+			oContext.fillStyle = null;
 		}
-		
-		oContext.restore();
 	}
 });

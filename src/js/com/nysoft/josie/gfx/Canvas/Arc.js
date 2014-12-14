@@ -5,6 +5,18 @@ com.nysoft.josie.gfx.Canvas.Circle.extend('com.nysoft.josie.gfx.Canvas.Arc', {
 		beginDegrees: { type: 'number', defaultValue: 0 },
 		endDegrees: { type: 'number', defaultValue: 0 }
 	},
+
+	setBeginDegrees: function(value) {
+		if(typeof value === 'number') {
+			this.setProperty('beginDegrees', Josie.utils.deg2rad(value));
+		}
+	},
+
+	setEndDegrees: function(value) {
+		if(typeof value === 'number') {
+			this.setProperty('endDegrees', Josie.utils.deg2rad(value));
+		}
+	},
 	
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
@@ -12,21 +24,14 @@ com.nysoft.josie.gfx.Canvas.Circle.extend('com.nysoft.josie.gfx.Canvas.Arc', {
             iWidth = this.getWidth();
 
 		oContext.save();
-		oContext.beginPath();
 		this.applyRotation(canvas, iWidth, iWidth);
-		oContext.arc(oVector.getX(), oVector.getY(), iWidth, Josie.utils.deg2rad(this.getBeginDegrees()), Josie.utils.deg2rad(this.getEndDegrees()), false);
-		
-		this.applyStrokeSettings(canvas);
-		if(this.isStroked()) {
-			oContext.stroke();
-		}
-		
-		this.applyFillSettings(canvas);
-		if(this.isFilled()) {
-			oContext.fill();
-		}
-		
+		oContext.beginPath();
+		oContext.arc(oVector.getX(), oVector.getY(), iWidth, this.getBeginDegrees(), this.getEndDegrees(), false);
 		oContext.closePath();
+
+		this.applyStrokeSettings(oContext);
+		this.applyFillSettings(oContext);
+		
 		oContext.restore();
 	}
 });

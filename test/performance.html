@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Josie-GFX - Performance Tests</title>
+    <!-- Loading jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Loading Josie-Core -->
+    <script src="../node_modules/josie-core/src/js/core.js"></script>
+    <!-- Loading Bootstrap 3 CSS-Framework -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script>
+        //set debug logging
+        Josie.log.setLevel(Josie.log.level.Info);
+        //set location to gfx-lib to right path (other than core-lib)
+        Josie.namespace('com.nysoft.josie.gfx', '../src/js/com/nysoft/josie/gfx');
+        Josie.namespace('com.nysoft.josie.ui', '../node_modules/josie-ui/src/js/com/nysoft/josie/ui');
+
+        //set an alias for ui-lib to easy access that namespace
+        Josie.alias('gfx', 'com.nysoft.josie.gfx');
+        Josie.alias('ui', 'com.nysoft.josie.ui');
+
+        Josie.require('gfx.Canvas2D');
+        Josie.require('gfx.Canvas.Line');
+        Josie.require('gfx.Canvas.Square');
+        Josie.require('gfx.Canvas.Polygon');
+        Josie.require('gfx.Canvas.Model');
+        gfx.Canvas2D.extend('test.Performance', {
+
+            meta: {
+                linesPerStar: { type: 'number', defaultValue: 70 },
+                preRender: { type: 'boolean', defaultValue: false }
+            },
+
+            addStar: function() {
+                var x = 10,
+                    y = 10;
+                if(this.iLastIndex) {
+                    x = x+(110*this.iLastIndex);
+                }
+                var oStar = this.createStar(x,y);
+                this.iLastIndex = this.addContent(oStar);
+                this.addLoop(this.iLastIndex, jQuery.proxy(this.animateStar, oStar));
+            },
+
+            removeStar: function() {
+                var aContent = this.getContent()
+                aContent.pop();
+                this.removeLoop(aContent.length);
+                if(aContent.length == 1) {
+                    this.rerender();
+                }
+            },
+
+            createStar: function(x,y) {
+                var aLines = [],
+                    iLinePerStar = this.getLinesPerStar()
+                    degPerLine = 360/iLinePerStar;
+                for(var i = 0; i<= iLinePerStar; i++) {
+                    aLines.push(new gfx.Canvas.Polygon(null, {
+                        vector: new gfx.Canvas.Vector(50, 50),
+                        rotation: degPerLine*i,
+                        numberOfSides: 6,
+                        text: 'Some text',
+                        width: 50,
+                        length: 50,
+                        lineWidth: 1,
+                        color: "#000",
+                        fillColor: '#000'
+                    }));
+                }
+                return new gfx.Canvas.Model(null, {
+                   content: aLines,
+                    vector: new gfx.Canvas.Vector(x, y),
+                    height: 100,
+                    width: 100,
+                    preRender: this.getPreRender()
+                });
+            },
+
+            animateStar: function() {
+                if(this.getRotation() < 360) {
+                    this.addRotation(1);
+                } else {
+                    this.setRotation(1);
+                }
+            }
+        });
+    </script>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div data-class="ui.Heading" data-text="Without PreRendering"></div>
+    <div data-class="ui.Row">
+
+        <div data-class="ui.Column" data-size="ui.Column.Size.Small.8">
+
+            <div data-class="test.Performance" data-id="testApp" data-height="500">
+
+                <div data-class="gfx.Canvas.Debug.FPS" data-fill-color="#ff0000" data-canvas-id="testApp">
+                    <div data-property="vector">
+                        <div data-class="gfx.Canvas.Vector" data-x="0" data-y="10"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div data-class="ui.Column" data-size="ui.Column.Size.Small.4">
+            <div data-class="ui.Button" data-text="Add Star" data-on-click="Josie.byId('testApp').addStar()"></div>
+            <div data-class="ui.Button" data-text="Remove Star" data-on-click="Josie.byId('testApp').removeStar()"></div>
+        </div>
+
+    </div>
+
+    <div data-class="ui.Heading" data-text="With PreRendering"></div>
+    <div data-class="ui.Row">
+
+        <div data-class="ui.Column" data-size="ui.Column.Size.Small.8">
+
+            <div data-class="test.Performance" data-id="preRenderTestApp" data-height="500" data-pre-render="true">
+
+                <div data-class="gfx.Canvas.Debug.FPS" data-fill-color="#ff0000" data-canvas-id="preRenderTestApp">
+                    <div data-property="vector">
+                        <div data-class="gfx.Canvas.Vector" data-x="0" data-y="10"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div data-class="ui.Column" data-size="ui.Column.Size.Small.4">
+            <div data-class="ui.Button" data-text="Add Star" data-on-click="Josie.byId('preRenderTestApp').addStar()"></div>
+            <div data-class="ui.Button" data-text="Remove Star" data-on-click="Josie.byId('preRenderTestApp').removeStar()"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>

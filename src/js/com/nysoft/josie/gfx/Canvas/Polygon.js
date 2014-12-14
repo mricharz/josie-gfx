@@ -29,15 +29,8 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 			oContext.lineTo(x, y);
 		}
 
-		this.applyStrokeSettings(canvas);
-		if(this.isStroked()) {
-			oContext.stroke();
-		}
-		
-		this.applyFillSettings(canvas);
-		if(this.isFilled()) {
-			oContext.fill();
-		}
+		this.applyStrokeSettings(oContext);
+		this.applyFillSettings(oContext);
 		
 		oContext.closePath();
 		oContext.restore();

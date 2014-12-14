@@ -24,14 +24,10 @@ com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model'
             this._preRenderedCanvas = null;
             //if preRender is done
             this._preRenderCanvas.bindEvent('onAfterRenderer', function(e, oData) {
-                oData.model._preRenderedCanvas = oData.model.getPreRenderCanvas().getDom().get(0);
+                oData.model._preRenderedCanvas = oData.model._preRenderCanvas.getDom().get(0);
                 oData.model.trigger('onPreRenderDone');
             }, { model: this });
         }
-    },
-
-    getPreRenderCanvas: function() {
-        return this._preRenderCanvas;
     },
 
     invalidate: function() {
@@ -41,14 +37,13 @@ com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model'
 
 	render: function(canvas) {
 		if(this.getPreRender()) {
-            var oPreRenderCanvas = this.getPreRenderCanvas();
-
             if(!this._preRenderedCanvas) {
+                this.unbindEvent('onPreRenderDone');
                 this.bindEvent('onPreRenderDone', jQuery.proxy(function () {
                     this._renderPrerenderedImage(canvas);
                 }, this));
-                oPreRenderCanvas.setContent(this.getContent());
-                oPreRenderCanvas.rerender();
+                this._preRenderCanvas.setContent(this.getContent());
+                this._preRenderCanvas.rerender();
             } else {
                 this._renderPrerenderedImage(canvas);
             }
@@ -58,17 +53,14 @@ com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model'
 	},
 
     _renderPrerenderedImage: function(canvas) {
-        if(this._preRenderedCanvas) {
-            var oContext = canvas.getContext(),
-                oVector = this.getVector(),
-                iWidth = this.getWidth(),
-                iHeight = this.getHeight();
-            oContext.save();
-            this.applyRotation(canvas, iWidth, iHeight);
-            //draw prerendered image
-            oContext.drawImage(this._preRenderedCanvas, oVector.getX(), oVector.getY(), iWidth, iHeight);
-            oContext.restore();
-            this.unbindEvent('onPreRenderDone');
-        }
+        var oContext = canvas.getContext(),
+            oVector = this.getVector(),
+            iWidth = this.getWidth(),
+            iHeight = this.getHeight();
+        oContext.save();
+        this.applyRotation(canvas, iWidth, iHeight);
+        //draw prerendered image
+        oContext.drawImage(this._preRenderedCanvas, oVector.getX(), oVector.getY(), iWidth, iHeight);
+        oContext.restore();
     }
 });

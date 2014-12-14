@@ -1,4 +1,4 @@
-Josie.require('com.nysoft.josie.core.BaseObject');
+Josie.require('com.nysoft.josie.core.ManagedObject');
 
 com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector', {
 	meta: {
@@ -7,24 +7,21 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector',
 	},
 	
 	add: function(vector) {
-		return new com.nysoft.josie.gfx.Canvas.Vector(
-				this.getX()+vector.getX(),
-				this.getY()+vector.getY()
-				);
+		this.setX(this.getX()+vector.getX());
+		this.setY(this.getY()+vector.getY());
+		return this;
 	},
 	
 	substract: function(vector) {
-		return new com.nysoft.josie.gfx.Canvas.Vector(
-				this.getX()-vector.getX(),
-				this.getY()-vector.getY()
-				);
+		this.setX(this.getX()-vector.getX());
+		this.setY(this.getY()-vector.getY());
+		return this;
 	},
 	
 	multiply: function(vector) {
-		return new com.nysoft.josie.gfx.Canvas.Vector(
-				this.getX()*vector.getX(),
-				this.getY()*vector.getY()
-				);
+		this.setX(this.getX()*vector.getX());
+		this.setY(this.getY()*vector.getY());
+		return this;
 	},
 	
 	length: function() {
@@ -36,25 +33,22 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector',
 	},
 	
 	angle: function() {
-		 return -Math.atan2(-this.getY(), this.getX());
+		return -Math.atan2(-this.getY(), this.getX());
 	},
 	
 	rotate: function(centerVector, iDeg) {
 		//substract center
-		divV = this.substract(centerVector);
+		this.substract(centerVector);
 		//get length
-		var iLength = divV.length();
+		var iLength = this.length();
 		//get angle
-		var iAngle = divV.angle();
+		var iAngle = this.angle();
 		//change angle
 		iAngle += Josie.utils.deg2rad(iDeg);
 		//polar to cartesian
-		newVect = new com.nysoft.josie.gfx.Canvas.Vector(
-			iLength * Math.cos(iAngle),
-			iLength * Math.sin(iAngle)
-		);
-		//add center and return
-		return newVect.add(centerVector);
+		this.setX(iLength * Math.cos(iAngle));
+		this.setY(iLength * Math.sin(iAngle));
+		return this.add(centerVector);
 	},
 	
 	normalize: function() {
@@ -64,18 +58,12 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector',
 	},
 	
 	setX: function(value) {
-		if(typeof value === 'string') {
-			value = parseInt(value, 10);
-		}
 		if(typeof value === 'number') {
 			this.setProperty('x', value);
 		}
 	},
 	
 	setY: function(value) {
-		if(typeof value === 'string') {
-			value = parseInt(value, 10);
-		}
 		if(typeof value === 'number') {
 			this.setProperty('y', value);
 		}

@@ -6,18 +6,19 @@ com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Lin
 		lineWidth: { type: 'number', defaultValue: 1 },
 		color: { type: 'string', defaultValue: '#000000' }
 	},
+
+	init: function() {
+		this.targetVector = new com.nysoft.josie.gfx.Canvas.Vector();
+	},
 	
 	calculateTargetVector: function() {
-		var targetVector = new com.nysoft.josie.gfx.Canvas.Vector(this.getVector().getX()+this.getLength(), this.getVector().getY());
-		return targetVector.rotate(this.getVector(), this.getRotation());
+		var oVector = this.getVector();
+		this.targetVector.setX(oVector.getX()+this.getLength());
+		this.targetVector.setY(oVector.getY());
+		return this.targetVector.rotate(oVector, this.getRotation());
 	},
 	
 	render: function(canvas) {
-		//there is no need to render if invisible!!!
-		if(this.getColor() == 'none' || this.getLength() == 0) {
-			return;
-		}
-		
 		var oContext = canvas.getContext(),
 			oTargetVector = this.calculateTargetVector();
 		

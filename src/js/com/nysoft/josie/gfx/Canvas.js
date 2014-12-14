@@ -43,8 +43,8 @@ com.nysoft.josie.core.Control.extend('com.nysoft.josie.gfx.Canvas', {
 
         Josie.log.trace('Canvas::_updateSize', jqParent, iInnerHeight, iInnerWidth);
 
-        jqDom.get(0).width = (this.getWidth() >= iInnerWidth || !this.getWidth()) ? iInnerWidth : this.getWidth();
-        jqDom.get(0).height = (this.getHeight() >= iInnerHeight || !this.getHeight()) ? iInnerHeight : this.getHeight();
+        jqDom.get(0).width = this.width = (this.getWidth() >= iInnerWidth || !this.getWidth()) ? iInnerWidth : this.getWidth();
+        jqDom.get(0).height = this.height = (this.getHeight() >= iInnerHeight || !this.getHeight()) ? iInnerHeight : this.getHeight();
     },
 	
 	destroy: function() {
