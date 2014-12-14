@@ -125,10 +125,7 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 			(bHaveToRerender) && this.rerender();
 		}
 		//continue the main-loop
-		return (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
-		        function(callback) {
-		          window.setTimeout(callback, 1000 / 60);
-		        })(jQuery.proxy(this._animationLoop, this));
+		return Josie.requestAnimationFrame(jQuery.proxy(this._animationLoop, this));
 	}
 	
 });

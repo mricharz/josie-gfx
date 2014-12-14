@@ -45,10 +45,6 @@ com.nysoft.josie.core.Control.extend('com.nysoft.josie.gfx.Canvas', {
 
         jqDom.get(0).width = this.width = (this.getWidth() >= iInnerWidth || !this.getWidth()) ? iInnerWidth : this.getWidth();
         jqDom.get(0).height = this.height = (this.getHeight() >= iInnerHeight || !this.getHeight()) ? iInnerHeight : this.getHeight();
-    },
+    }
 	
-	destroy: function() {
-		this.getDom().remove();
-	}
-
 });
