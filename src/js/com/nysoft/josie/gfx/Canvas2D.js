@@ -125,7 +125,7 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 			(bHaveToRerender) && this.rerender();
 		}
 		//continue the main-loop
-		return Josie.requestAnimationFrame(jQuery.proxy(this._animationLoop, this));
+		return requestAnimFrame(jQuery.proxy(this._animationLoop, this));
 	}
 	
 });
