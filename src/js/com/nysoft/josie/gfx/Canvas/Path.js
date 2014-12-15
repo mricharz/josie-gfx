@@ -51,7 +51,7 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 		
 		oContext.save();
 		oContext.beginPath();
-		this.applyRotation(canvas, iSize, iSize);
+		this.applyRotation(oContext, iSize, iSize);
 		
 		//go to first vector
 		var startVector = this.getNode(0);

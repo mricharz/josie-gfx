@@ -12,7 +12,7 @@ com.nysoft.josie.gfx.Canvas.Square.extend('com.nysoft.josie.gfx.Canvas.Rectangle
             iHeight = this.getHeight();
 		
 		oContext.save();
-		this.applyRotation(canvas, iWidth, iHeight);
+		this.applyRotation(oContext, iWidth, iHeight);
 		oContext.beginPath();
 		oContext.rect(oVector.getX(), oVector.getY(), iWidth, iHeight);
 		oContext.closePath();

@@ -12,7 +12,7 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 		
 		oContext.save();
 
-		this.applyRotation(canvas, iWidth, iWidth);
+		this.applyRotation(oContext, iWidth, iWidth);
 		oContext.beginPath();
 		oContext.rect(oVector.getX(), oVector.getY(), iWidth, iWidth);
 		oContext.closePath();

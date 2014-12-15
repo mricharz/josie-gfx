@@ -11,14 +11,15 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
             iWidth = this.getWidth();
 
 		oContext.save();
-		this.applyRotation(canvas, iWidth, iWidth);
+		this.applyRotation(oContext, iWidth, iWidth);
 		oContext.beginPath();
-		oContext.arc(oVector.getX(), oVector.getY(), iWidth, 0, 2 * Math.PI, false);
+        // 6.283185307179586 = 2 * Math.PI
+		oContext.arc(oVector.getX(), oVector.getY(), iWidth, 0, 6.283185307179586, false);
 		oContext.closePath();
 
 		this.applyStrokeSettings(oContext);
 		this.applyFillSettings(oContext);
 		
 		oContext.restore();
-	}
+    }
 });

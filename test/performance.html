@@ -22,64 +22,172 @@
         Josie.alias('ui', 'com.nysoft.josie.ui');
 
         Josie.require('gfx.Canvas2D');
-        Josie.require('gfx.Canvas.Line');
-        Josie.require('gfx.Canvas.Square');
-        Josie.require('gfx.Canvas.Polygon');
-        Josie.require('gfx.Canvas.Model');
+        Josie.require('ui.Column');
+        Josie.require('ui.ProgressBar');
+        Josie.require('ui.Label');
+        Josie.require('gfx.Canvas.Container');
         gfx.Canvas2D.extend('test.Performance', {
 
             meta: {
-                linesPerStar: { type: 'number', defaultValue: 70 },
-                preRender: { type: 'boolean', defaultValue: false }
+                typesToTest: {
+                    type: 'string[]',
+                    defaultValue: [
+                        'gfx.Canvas.Arc',
+                        'gfx.Canvas.Circle',
+                        'gfx.Canvas.Elipsis',
+                        'gfx.Canvas.Image',
+                        'gfx.Canvas.Line',
+                        'gfx.Canvas.Polygon',
+                        'gfx.Canvas.Rectangle',
+                        'gfx.Canvas.Square',
+                        'gfx.Canvas.Text'
+                    ]
+                },
+                options: {
+                    type: 'object',
+                    defaultValue: {
+                        lineWidth: 5,
+                        length: 50,
+                        width: 40,
+                        height: 60,
+                        beginDegrees: 30,
+                        endDegrees: 180,
+                        source: 'http://dummyimage.com/50x50/000/fff',
+                        type: 'stroke|fill',
+                        color: '#000',
+                        fillColor: '#000',
+                        borderColor: '#ff0000',
+                        borderWidth: 2,
+                        numberOfSides: 8,
+                        size: 50,
+                        text: 'Lorem ipsum dolor sit'
+                    }
+                },
+                resultlistId: 'string',
+                secondsPerTest: { type: 'number', defaultValue: 5 },
+                objectsPerTest: { type: 'number', defaultValue: 100 }
             },
 
-            addStar: function() {
-                var x = 10,
-                    y = 10;
-                if(this.iLastIndex) {
-                    x = x+(110*this.iLastIndex);
+            init: function() {
+                this._super('init', arguments);
+
+                this.bindEvent('onAfterRenderer', function() {
+                    this.unbindEvent('onAfterRenderer');
+                    setTimeout(jQuery.proxy(function() {
+                        this.resultlist = Josie.byId(this.getResultlistId());
+                        this._updateSize();
+                        this.getOptions()['rotationPoint'] = new gfx.Canvas.Vector(this.width/2,this.height/2)
+                        this.runTest(this.getTypesToTest().pop());
+                    }, this), 0);
+                });
+                this.bindEvent('onTestReady', this.onTestReady);
+
+                this.setMeasurement(true);
+                this.setMeasureCallback(function(fFps) {
+                    this.fps = Math.round(fFps * 100) / 100;
+                    this.points += this.fps;
+                });
+                this.fps = 0;
+                this.points = 0;
+                this.maxPoints = 0;
+                this.sumPoints = 0;
+            },
+
+            start: function() {
+                var aTypesToTest = this.getTypesToTest();
+                if(aTypesToTest && aTypesToTest.length) {
+                    while(aTypesToTest.length) {
+                        var sType = aTypesToTest.pop();
+                        this.runTest(sType);
+                    }
                 }
-                var oStar = this.createStar(x,y);
-                this.iLastIndex = this.addContent(oStar);
-                this.addLoop(this.iLastIndex, jQuery.proxy(this.animateStar, oStar));
             },
 
-            removeStar: function() {
-                var aContent = this.getContent()
-                aContent.pop();
-                this.removeLoop(aContent.length);
-                if(aContent.length == 1) {
+            onTestReady: function(e) {
+                this.removeLoop('rotate');
+                if(this.points > this.maxPoints) {
+                    this.maxPoints = this.points;
+                }
+                this.sumPoints += this.points;
+                if(this.resultlist) {
+                    var aResultContent = this.resultlist.getContent();
+                    if(aResultContent && aResultContent.length) {
+                        Josie.utils.each(aResultContent, jQuery.proxy(function (oObject) {
+                            var oProgressBar = oObject.getContent()[1];
+                            oProgressBar.setMax(this.maxPoints);
+                            oProgressBar.invalidate();
+                        }, this));
+                    }
+                    this.resultlist.addContent(
+                        new ui.Row(null, {
+                            content: [
+                                new ui.Label(null, {
+                                    text: e[0].type + ' - Avg. ' + this.fps + ' FPS - ' + Math.round(this.points) + ' Points'
+                                }),
+                                new ui.ProgressBar(null, {
+                                    min: 0,
+                                    max: this.maxPoints,
+                                    value: this.points,
+                                    type: ui.ProgressBar.Type.Success
+                                })
+                            ]
+                        })
+                    );
+                    this.resultlist.rerender();
+                }
+                this.reset();
+                if(this.getTypesToTest().length) {
+                    this.runTest(this.getTypesToTest().pop());
+                } else {
+                    this.addContent(new gfx.Canvas.Text(null, {
+                        text: 'All tests done! '+Math.round(this.sumPoints)+' Points',
+                        vector: new gfx.Canvas.Vector(this.width/3, this.height/3),
+                        fillColor: '#000',
+                        fontSize: 20,
+                        fontStyle: 'bold'
+                    }));
                     this.rerender();
                 }
             },
 
-            createStar: function(x,y) {
-                var aLines = [],
-                    iLinePerStar = this.getLinesPerStar()
-                    degPerLine = 360/iLinePerStar;
-                for(var i = 0; i<= iLinePerStar; i++) {
-                    aLines.push(new gfx.Canvas.Polygon(null, {
-                        vector: new gfx.Canvas.Vector(50, 50),
-                        rotation: degPerLine*i,
-                        numberOfSides: 6,
-                        text: 'Some text',
-                        width: 50,
-                        length: 50,
-                        lineWidth: 1,
-                        color: "#000",
-                        fillColor: '#000'
-                    }));
+            runTest: function(sType) {
+                Josie.require(sType);
+                var fnTestClass = Josie.getClass(sType);
+                if(fnTestClass) {
+                    var oTestObjects = this.createObjects(fnTestClass, this.getOptions());
+                    this.addContent(oTestObjects);
+                    this.addLoop('rotate', jQuery.proxy(this.animate, oTestObjects));
+                    setTimeout(jQuery.proxy(function(){
+                        this.trigger('onTestReady', { type: sType });
+                    }, this), 1000 * this.getSecondsPerTest());
                 }
-                return new gfx.Canvas.Model(null, {
-                   content: aLines,
-                    vector: new gfx.Canvas.Vector(x, y),
-                    height: 100,
-                    width: 100,
-                    preRender: this.getPreRender()
+            },
+
+            reset: function() {
+                Josie.utils.each(this.getContent(), function(oObject){
+                    oObject.destroy();
+                });
+                this.setContent([]);
+                this.points = 0;
+                this.fps = 0;
+                this.rerender();
+            },
+
+            createObjects: function(fnClass, options, preRender) {
+                var aObjects = [],
+                    iObjectsPerTest = this.getObjectsPerTest(),
+                    iRotationPerObject = 360 / iObjectsPerTest;
+                for(var i = 0; i< iObjectsPerTest; i++) {
+                    options['rotation'] = iRotationPerObject * i;
+                    aObjects.push(new fnClass(null, options));
+                }
+                return new gfx.Canvas.Container(null, {
+                    content: aObjects,
+                    vector: new gfx.Canvas.Vector(this.width/3, this.height/3)
                 });
             },
 
-            animateStar: function() {
+            animate: function() {
                 if(this.getRotation() < 360) {
                     this.addRotation(1);
                 } else {
@@ -98,52 +206,20 @@
     </style>
 </head>
 <body>
-    <div data-class="ui.Heading" data-text="Without PreRendering"></div>
-    <div data-class="ui.Row">
 
-        <div data-class="ui.Column" data-size="ui.Column.Size.Small.8">
+    <div data-class="ui.Container">
+        <div data-class="ui.Row">
+            <div data-class="ui.Heading" data-text="Performance Rendering Tests"></div>
 
-            <div data-class="test.Performance" data-id="testApp" data-height="500">
-
-                <div data-class="gfx.Canvas.Debug.FPS" data-fill-color="#ff0000" data-canvas-id="testApp">
-                    <div data-property="vector">
-                        <div data-class="gfx.Canvas.Vector" data-x="0" data-y="10"></div>
-                    </div>
-                </div>
-
+            <div data-class="ui.Column" data-size="ui.Column.Size.Small.8" data-css-styles='{"background":"rgba(255,255,255,0.85)", "box-shadow": "0 0 14px rgba(0,0,0,0.6)"}'>
+                <div data-class="test.Performance" data-id="tester" data-resultlist-id="resultlist" data-height="500"></div>
             </div>
 
+            <div data-class="ui.Column" data-id="resultlist" data-size="ui.Column.Size.Small.4"></div>
         </div>
-
-        <div data-class="ui.Column" data-size="ui.Column.Size.Small.4">
-            <div data-class="ui.Button" data-text="Add Star" data-on-click="Josie.byId('testApp').addStar()"></div>
-            <div data-class="ui.Button" data-text="Remove Star" data-on-click="Josie.byId('testApp').removeStar()"></div>
+        <div data-class="ui.Alert">
+            <div data-class="ui.Text" data-text="Keep this browser-tap in focus while running tests!"></div>
         </div>
-
-    </div>
-
-    <div data-class="ui.Heading" data-text="With PreRendering"></div>
-    <div data-class="ui.Row">
-
-        <div data-class="ui.Column" data-size="ui.Column.Size.Small.8">
-
-            <div data-class="test.Performance" data-id="preRenderTestApp" data-height="500" data-pre-render="true">
-
-                <div data-class="gfx.Canvas.Debug.FPS" data-fill-color="#ff0000" data-canvas-id="preRenderTestApp">
-                    <div data-property="vector">
-                        <div data-class="gfx.Canvas.Vector" data-x="0" data-y="10"></div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div data-class="ui.Column" data-size="ui.Column.Size.Small.4">
-            <div data-class="ui.Button" data-text="Add Star" data-on-click="Josie.byId('preRenderTestApp').addStar()"></div>
-            <div data-class="ui.Button" data-text="Remove Star" data-on-click="Josie.byId('preRenderTestApp').removeStar()"></div>
-        </div>
-
     </div>
 
 </body>
