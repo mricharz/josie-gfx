@@ -15,8 +15,8 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 			iNumberOfSides = this.getNumberOfSides();
 
 		oContext.save();
+        this.applyRotation(oContext, iSize, iSize);
 		oContext.beginPath();
-		this.applyRotation(oContext, iSize, iSize);
 
         //go to first edge
         oContext.moveTo(iX + iSize * 1, iY + iSize * 0);

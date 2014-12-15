@@ -11,6 +11,10 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 		baseline: { type: 'string', defaultValue: com.nysoft.josie.gfx.Canvas.Text.Baseline.Alphabetic }
 	},
 
+    init: function() {
+        this._prepareFontString();
+    },
+
 	_prepareFontString: function() {
 		this.font = this.getFontStyle() + ' ' + this.getFontSize() + 'px ' + this.getFontFamily();
 	},
@@ -39,12 +43,15 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
 			oVector = this.getVector(),
-			sText = this.getText();
+			sText = this.getText(),
+            sBaseline = this.getBaseline();
 		oContext.save();
-		oContext.font = this.font;
-        oContext.baseline = this.getBaseline();
-        var iMetric = oContext.measureText(sText);
-        this.applyRotation(oContext, iMetric, this.getFontSize());
+        if(oContext.font != this.font || oContext.baseline != sBaseline || !this.metric) {
+            oContext.font = this.font;
+            oContext.baseline = sBaseline;
+            this.metric = oContext.measureText(sText);
+        }
+        this.applyRotation(oContext, this.metric, this.getFontSize());
 
 		this.applyStrokeSettings(oContext, oVector, sText);
 		this.applyFillSettings(oContext, oVector, sText);
