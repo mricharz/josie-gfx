@@ -1,41 +1,41 @@
 Josie.require('com.nysoft.josie.core.ManagedObject');
 
 com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector', {
-	meta: {
-		x: { type: 'number', defaultValue: 0 },
-		y: { type: 'number', defaultValue: 0 }
+
+	setProperties: function() {
+		debugger;
 	},
-	
+
 	add: function(vector) {
-		this.setX(this.getX()+vector.getX());
-		this.setY(this.getY()+vector.getY());
+		this.x = this.x+vector.getX();
+		this.y = this.y+vector.getY();
 		return this;
 	},
-	
+
 	substract: function(vector) {
-		this.setX(this.getX()-vector.getX());
-		this.setY(this.getY()-vector.getY());
+		this.x = this.x-vector.getX();
+		this.y = this.y-vector.getY();
 		return this;
 	},
-	
+
 	multiply: function(vector) {
-		this.setX(this.getX()*vector.getX());
-		this.setY(this.getY()*vector.getY());
+		this.x = this.x*vector.getX();
+		this.y = this.y*vector.getY();
 		return this;
 	},
-	
+
 	length: function() {
-		return Math.sqrt((this.getX() * this.getX()) + (this.getY() * this.getY()));
+		return Math.sqrt((this.x * this.x) + (this.y * this.y));
 	},
-	
+
 	dotProduct: function(vector) {
-		return (this.getX() * vector.getX() + this.getY() * vector.getY());
+		return (this.x * vector.getX() + this.y * vector.getY());
 	},
-	
+
 	angle: function() {
-		return -Math.atan(-this.getY() / this.getX());
+		return -Math.atan(-this.y / this.x);
 	},
-	
+
 	rotate: function(centerVector, iDeg) {
 		//substract center
 		this.substract(centerVector);
@@ -46,37 +46,45 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector',
 		//change angle
 		iAngle += Josie.utils.deg2rad(iDeg);
 		//polar to cartesian
-		this.setX(iLength * Math.cos(iAngle));
-		this.setY(iLength * Math.sin(iAngle));
+		this.x = iLength * Math.cos(iAngle);
+		this.y = iLength * Math.sin(iAngle);
 		return this.add(centerVector);
 	},
-	
+
 	normalize: function() {
 		var iLength = this.length();
-        this.setX(this.getX() / iLength);
-        this.setY(this.getY() / iLength);
+		this.x = this.x / iLength;
+		this.y = this.y / iLength;
 	},
-	
+
+	getX: function() {
+		return this.x;
+	},
+
 	setX: function(value) {
 		if(typeof value === 'number') {
-			this.setProperty('x', value);
+			this.x = value;
 		}
 	},
-	
+
+	getY: function() {
+		return this.y;
+	},
+
 	setY: function(value) {
 		if(typeof value === 'number') {
-			this.setProperty('y', value);
+			this.y = value;
 		}
 	},
-	
+
 	init: function(x, y) {
 		if(x !== undefined && x.length) {
 			if(jQuery.isPlainObject(x)) {
 				this.setX(x.x);
-				this.setX(x.y);
+				this.setY(x.y);
 			} else {
 				this.setX(x[0]);
-				this.setX(x[1]);
+				this.setY(x[1]);
 			}
 		}
 		if(x !== undefined && y !== undefined) {
@@ -84,22 +92,23 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector',
 			this.setY(y);
 		}
 	},
-	
+
 	toArray: function() {
-		return [this.getX(), this.getY()];
+		return [this.x, this.y];
 	},
-	
+
 	toPlainObject: function() {
 		return {
-			x: this.getX(),
-			y: this.getY()
+			x: this.x,
+			y: this.y
 		};
 	},
-	
+
 	__toString: function() {
-		return "[" + 
-			this.getX() + "," + 
-			this.getY() + 
-		"]";
+		return "[" +
+			this.x + "," +
+			this.y +
+			"]";
 	}
+
 });
