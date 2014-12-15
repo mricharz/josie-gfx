@@ -33,7 +33,7 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector',
 	},
 	
 	angle: function() {
-		return -Math.atan2(-this.getY(), this.getX());
+		return -Math.atan(-this.getY() / this.getX());
 	},
 	
 	rotate: function(centerVector, iDeg) {
