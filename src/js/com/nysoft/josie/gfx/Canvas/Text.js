@@ -41,10 +41,10 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 			oVector = this.getVector(),
 			sText = this.getText();
 		oContext.save();
-		var iMetric = oContext.measureText(sText);
-		this.applyRotation(canvas, iMetric, this.getFontSize());
 		oContext.font = this.font;
-		oContext.baseline = this.getBaseline();
+        oContext.baseline = this.getBaseline();
+        var iMetric = oContext.measureText(sText);
+        this.applyRotation(oContext, iMetric, this.getFontSize());
 
 		this.applyStrokeSettings(oContext, oVector, sText);
 		this.applyFillSettings(oContext, oVector, sText);

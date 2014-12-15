@@ -29,6 +29,16 @@ com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Con
 			//reset vector
 			oObject.getVector().substract(oVector);
 		});
-	}
+	},
+
+    destroy: function() {
+        var aContent = this.getContent();
+        if(aContent && aContent.length) {
+            Josie.utils.each(this.getContent(), function (oObject) {
+                oObject.destroy();
+            });
+        }
+        this._super('destroy');
+    }
 
 });

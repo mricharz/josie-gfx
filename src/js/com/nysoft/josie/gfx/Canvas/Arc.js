@@ -24,7 +24,7 @@ com.nysoft.josie.gfx.Canvas.Circle.extend('com.nysoft.josie.gfx.Canvas.Arc', {
             iWidth = this.getWidth();
 
 		oContext.save();
-		this.applyRotation(canvas, iWidth, iWidth);
+		this.applyRotation(oContext, iWidth, iWidth);
 		oContext.beginPath();
 		oContext.arc(oVector.getX(), oVector.getY(), iWidth, this.getBeginDegrees(), this.getEndDegrees(), false);
 		oContext.closePath();

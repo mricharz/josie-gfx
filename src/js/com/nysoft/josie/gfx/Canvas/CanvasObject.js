@@ -48,9 +48,8 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.CanvasOb
 		canvas.getContext().moveTo(oVector.getX(), oVector.getY());
 	},
 	
-	applyRotation: function(canvas, width, height) {
-		var oContext = canvas.getContext(),
-			oRotationPoint = this.getRotationPoint(),
+	applyRotation: function(oContext, width, height) {
+		var oRotationPoint = this.getRotationPoint(),
 			oVector = this.getVector(),
 			tx = 0,
 			ty = 0;

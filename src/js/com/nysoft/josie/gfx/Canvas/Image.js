@@ -9,21 +9,30 @@ com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Ima
 	},
 	
 	render: function(canvas) {
-		var oContext = canvas.getContext(),
-			oVector = this.getVector(),
-            iWidth = this.getWidth(),
-            iHeight = this.getHeight();
+		var oContext = this;
 
         if(!this._image) {
             this._image = this._openImage(this.getSource(), function () {
-                iHeight = iHeight || this.height;
-                iWidth = iWidth || this.width;
-                canvas.drawImage(this, oVector, iWidth, iHeight);
+                oContext._render(canvas, this);
             });
         } else {
-            canvas.drawImage(this._image, oVector, iWidth, iHeight);
+            this._render(canvas, this._image);
         }
 	},
+
+    _render: function(canvas, oImage) {
+        var oContext = canvas.getContext(),
+            oVector = this.getVector(),
+            iWidth = this.getWidth(),
+            iHeight = this.getHeight();
+
+        oContext.save();
+        oContext.beginPath();
+        this.applyRotation(oContext, iWidth, iHeight);
+        canvas.drawImage(oImage, oVector, iWidth, iHeight);
+        oContext.closePath();
+        oContext.restore();
+    },
 
     _openImage: function(file, callback) {
         image = new Image();

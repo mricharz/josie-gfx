@@ -13,17 +13,17 @@ com.nysoft.josie.gfx.Canvas.Circle.extend('com.nysoft.josie.gfx.Canvas.Elipsis',
 
         oContext.save();
         oContext.beginPath();
-        this.applyRotation(canvas, iWidth, iWidth);
+        this.applyRotation(oContext, iWidth, iWidth);
         oContext.translate(oVector.getX()-iWidth, oVector.getY()-iHeight);
         oContext.scale(iWidth, iHeight);
-        oContext.arc(1, 1, 1, 0, 2 * Math.PI, false);
+        // 6.283185307179586 = 2 * Math.PI
+        oContext.arc(1, 1, 1, 0, 6.283185307179586, false);
+        oContext.closePath();
         oContext.restore(); // restore to original state
         oContext.save();
 
         this.applyStrokeSettings(oContext);
         this.applyFillSettings(oContext);
-
-        oContext.closePath();
         oContext.restore();
     }
 });

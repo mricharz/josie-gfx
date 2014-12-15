@@ -11,7 +11,7 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
             iWidth = this.getWidth();
 
 		oContext.save();
-		this.applyRotation(canvas, iWidth, iWidth);
+		this.applyRotation(oContext, iWidth, iWidth);
 		oContext.beginPath();
 		oContext.arc(oVector.getX(), oVector.getY(), iWidth, 0, 2 * Math.PI, false);
 		oContext.closePath();

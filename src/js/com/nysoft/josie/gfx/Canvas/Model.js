@@ -58,7 +58,7 @@ com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model'
             iWidth = this.getWidth(),
             iHeight = this.getHeight();
         oContext.save();
-        this.applyRotation(canvas, iWidth, iHeight);
+        this.applyRotation(oContext, iWidth, iHeight);
         //draw prerendered image
         oContext.drawImage(this._preRenderedCanvas, oVector.getX(), oVector.getY(), iWidth, iHeight);
         oContext.restore();
