@@ -56,8 +56,8 @@
                         type: 'stroke|fill',
                         color: '#000',
                         fillColor: '#000',
-                        borderColor: '#ff0000',
-                        borderWidth: 2,
+                        strokeColor: '#ff0000',
+                        strokeWidth: 2,
                         numberOfSides: 8,
                         size: 50,
                         text: 'Lorem ipsum dolor sit'
@@ -76,7 +76,10 @@
                     setTimeout(jQuery.proxy(function() {
                         this.resultlist = Josie.byId(this.getResultlistId());
                         this._updateSize();
-                        this.getOptions()['rotationPoint'] = new gfx.Canvas.Vector(this.width/2,this.height/2)
+                        var options = this.getOptions();
+                        options.x = this.width/4;
+                        options.y = this.height/4;
+                        options.rotationPoint = new gfx.Canvas.Vector(this.width/2,this.height/2)
                         this.runTest(this.getTypesToTest().pop());
                     }, this), 0);
                 });
@@ -141,7 +144,8 @@
                 } else {
                     this.addContent(new gfx.Canvas.Text(null, {
                         text: 'All tests done! '+Math.round(this.sumPoints)+' Points',
-                        vector: new gfx.Canvas.Vector(this.width/3, this.height/3),
+                        x: this.width/3,
+                        y: this.height/3,
                         fillColor: '#000',
                         fontSize: 20,
                         fontStyle: 'bold'
@@ -156,7 +160,7 @@
                 if(fnTestClass) {
                     var oTestObjects = this.createObjects(fnTestClass, this.getOptions());
                     this.addContent(oTestObjects);
-                    this.addLoop('rotate', jQuery.proxy(this.animate, oTestObjects));
+                    oTestObjects.animation = this.animate(oTestObjects, this.animateObject);
                     setTimeout(jQuery.proxy(function(){
                         this.trigger('onTestReady', { type: sType });
                     }, this), 1000 * this.getSecondsPerTest());
@@ -165,6 +169,7 @@
 
             reset: function() {
                 Josie.utils.each(this.getContent(), function(oObject){
+                    oObject.animation.remove();
                     oObject.destroy();
                 });
                 this.setContent([]);
@@ -183,11 +188,13 @@
                 }
                 return new gfx.Canvas.Container(null, {
                     content: aObjects,
-                    vector: new gfx.Canvas.Vector(this.width/3, this.height/3)
+                    x: 0,
+                    y: 0,
+                    rotationPoint: new gfx.Canvas.Vector(this.width/2,this.height/2)
                 });
             },
 
-            animate: function() {
+            animateObject: function() {
                 if(this.getRotation() < 360) {
                     this.addRotation(1);
                 } else {

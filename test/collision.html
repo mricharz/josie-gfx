@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Josie-GFX - Collision Tests</title>
+    <!-- Loading jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Loading Josie-Core -->
+    <script src="../node_modules/josie-core/src/js/core.js"></script>
+    <!-- Loading Bootstrap 3 CSS-Framework -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script>
+        //set debug logging
+        Josie.log.setLevel(Josie.log.level.Info);
+        //set location to gfx-lib to right path (other than core-lib)
+        Josie.namespace('com.nysoft.josie.gfx', '../src/js/com/nysoft/josie/gfx');
+        Josie.namespace('com.nysoft.josie.ui', '../node_modules/josie-ui/src/js/com/nysoft/josie/ui');
+
+        //set an alias for ui-lib to easy access that namespace
+        Josie.alias('gfx', 'com.nysoft.josie.gfx');
+        Josie.alias('ui', 'com.nysoft.josie.ui');
+
+        Josie.require('gfx.Canvas2D');
+        Josie.require('ui.Column');
+        Josie.require('ui.ProgressBar');
+        Josie.require('ui.Label');
+        Josie.require('gfx.Canvas.Container');
+        Josie.require('gfx.Canvas.Quadrants');
+        gfx.Canvas2D.extend('test.Collision', {
+
+            meta: {
+                typesToTest: {
+                    type: 'string[]',
+                    defaultValue: [
+                        'gfx.Canvas.Arc',
+                        'gfx.Canvas.Circle',
+                        'gfx.Canvas.Elipsis',
+                        //'gfx.Canvas.Image',
+                        //'gfx.Canvas.Line',
+                        'gfx.Canvas.Polygon',
+                        'gfx.Canvas.Square',
+                        'gfx.Canvas.Rectangle',
+                        //'gfx.Canvas.Text'
+                    ]
+                },
+                options: {
+                    type: 'object',
+                    defaultValue: {
+                        lineWidth: 5,
+                        length: 50,
+                        width: 40,
+                        height: 60,
+                        beginDegrees: 30,
+                        endDegrees: 180,
+                        source: 'http://dummyimage.com/50x50/000/fff',
+                        type: 'stroke|fill',
+                        color: '#000',
+                        fillColor: '#000',
+                        strokeColor: '#ff0000',
+                        strokeWidth: 2,
+                        numberOfSides: 8,
+                        size: 50,
+                        text: 'Lorem ipsum dolor sit'
+                    }
+                }
+            },
+
+            init: function() {
+                this._super('init', arguments);
+
+                this.bindEvent('onAfterRenderer', function() {
+                    this.unbindEvent('onAfterRenderer');
+                    setTimeout(jQuery.proxy(function() {
+                        this._updateSize();
+                        var options = this.getOptions();
+                        options.x = this.width/4;
+                        options.y = this.height/4;
+                        this.initQuadrantContainer();
+                        this.initObjects();
+                    }, this), 0);
+                });
+            },
+
+            initQuadrantContainer: function() {
+                this.quadrants = new gfx.Canvas.Quadrants(null, {
+                    maxObjects: 10,
+                    maxLevels: 3,
+                    x: 0,
+                    y: 0,
+                    width: this.width,
+                    height: this.height,
+                    content: this.getContent()
+                });
+                this.animate(this.quadrants, this.detectCollision);
+            },
+
+            detectCollision: function(canvas) {
+                var aObjects = this.getAllQuadrantObjects();
+                for (var x = 0, len = aObjects.length; x < len; x++) {
+                    var oObject = aObjects[x],
+                        iObjectWidth = oObject.getWidth() || oObject.getHeight(),
+                        iObjectHeight = oObject.getHeight() || oObject.getWidth(),
+                        aNeighborObjects = [];
+                    this.findObjects(aNeighborObjects, oObject);
+                    for (y = 0, length = aNeighborObjects.length; y < length; y++) {
+                        var oNeighborObject = aNeighborObjects[y];
+                        if ( oObject.isCollidableWith(oNeighborObject.className) &&
+                                oObject.getX() < oNeighborObject.getX() + oNeighborObject.getWidth() &&
+                                oObject.getX() + iObjectWidth  > oNeighborObject.getX() &&
+                                oObject.getY() < oNeighborObject.getY() + oNeighborObject.height &&
+                                oObject.getY() + iObjectHeight > oNeighborObject.getY()) {
+                            oObject.isColliding = true;
+                            oNeighborObject.isColliding = true;
+                        }
+                    }
+                }
+            },
+
+            initObjects: function() {
+                var aTypesToTest = this.getTypesToTest();
+                Josie.utils.each(aTypesToTest, jQuery.proxy(function(sTypeToTest, iIndex) {
+                    Josie.require(sTypeToTest, {
+                        cache: false
+                    });
+                    var fnTestClass = Josie.getClass(sTypeToTest);
+                    if(fnTestClass) {
+                        var oObject = new fnTestClass(null, this.getOptions());
+                        this.addContent(oObject);
+                        this.animate(oObject, this.animateObject);
+                    }
+                }, this));
+            },
+
+            animateObject: function(canvas) {
+                var iX = this.getX(),
+                    iY = this.getY(),
+                    iSpeed = this.getSpeed();
+                if(this.isIntersecting()) {
+                    this.setFillColor('#cc0000');
+                }
+                this.setFillColor('#00cc00');
+                this.setX(iX+iSpeed);
+                this.setY(iY+iSpeed);
+            }
+        });
+    </script>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <div data-class="ui.Container">
+        <div data-class="ui.Row">
+            <div data-class="ui.Heading" data-text="Collision Tests"></div>
+
+            <div data-class="ui.Column" data-size="ui.Column.Size.Small.12" data-css-styles='{"background":"rgba(255,255,255,0.85)", "box-shadow": "0 0 14px rgba(0,0,0,0.6)"}'>
+                <div data-class="test.Collision" data-id="tester" data-height="500"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

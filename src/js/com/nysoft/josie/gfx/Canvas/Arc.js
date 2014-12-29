@@ -20,18 +20,18 @@ com.nysoft.josie.gfx.Canvas.Circle.extend('com.nysoft.josie.gfx.Canvas.Arc', {
 	
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
-			oVector = this.getVector(),
             iWidth = this.getWidth();
 
 		oContext.save();
 		this.applyRotation(oContext, iWidth, iWidth);
 		oContext.beginPath();
-		oContext.arc(oVector.getX(), oVector.getY(), iWidth, this.getBeginDegrees(), this.getEndDegrees(), false);
+		oContext.arc(this.getX(), this.getY(), iWidth, this.getBeginDegrees(), this.getEndDegrees(), false);
 		oContext.closePath();
 
 		this.applyStrokeSettings(oContext);
 		this.applyFillSettings(oContext);
 		
 		oContext.restore();
+        this.trigger('onAfterRendering', {canvas: canvas});
 	}
 });

@@ -12,6 +12,7 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 
 		//init loops
 		this.loops = {};
+        this.animations = [];
 		//start animationLooping
 		this._animationLoop();
 	},
@@ -81,9 +82,9 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
         this.trigger('onAfterRenderer');
 	},
 	
-	drawImage: function(oImage, vector, height, width) {
+	drawImage: function(oImage, x, y, height, width) {
         if(oImage instanceof Image) {
-            this.getContext().drawImage(oImage, vector.getX(), vector.getY(), width, height);
+            this.getContext().drawImage(oImage, x, y, width, height);
         }
 	},
 	
@@ -96,6 +97,27 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 		  this.getMeasureCallback().call(this, this.fps);
 	  }
 	},
+
+    animate: function(oObject, fnCallback) {
+        if(jQuery.isFunction(fnCallback)) {
+            var iAnimationIndex = this.animations.push({
+                object: oObject,
+                callback: fnCallback,
+                active: true
+            })-1;
+            var oAnimation = this.animations[iAnimationIndex];
+            oAnimation.start = function() {
+                oAnimation.active = true;
+            };
+            oAnimation.stop = function() {
+                oAnimation.active = false;
+            };
+            oAnimation.remove = jQuery.proxy(function() {
+                this.animations.splice(iAnimationIndex, 1);
+            }, this);
+            return oAnimation;
+        }
+    },
 	
 	addLoop: function(key, fnAnimation) {
 		this.loops[key] = fnAnimation;
@@ -114,13 +136,15 @@ com.nysoft.josie.gfx.Canvas.extend('com.nysoft.josie.gfx.Canvas2D', {
 	},
 	
 	_animationLoop: function() {
-		if(this.loops) {
+		if(this.animations) {
 			var bHaveToRerender = false;
 			//execute loops
-			jQuery.each(this.loops, jQuery.proxy(function(key, fnAnimation) {
-				fnAnimation.call(this, key);
-				bHaveToRerender = true;
-			}, this));
+			Josie.utils.each(this.animations, jQuery.proxy(function(oAnimation) {
+                if(oAnimation.active) {
+                    oAnimation.callback.call(oAnimation.object, this);
+                    bHaveToRerender = true;
+                }
+            }, this));
 			//rerender canvas (only if needed)
 			(bHaveToRerender) && this.rerender();
 		}

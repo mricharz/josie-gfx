@@ -32,16 +32,19 @@ com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model'
 
     invalidate: function() {
         //set preRenderedCanvas to null to force a rerender
-        this._preRenderedCanvas = null;
+        if(this._preRenderedCanvas) {
+            this._preRenderCanvas.destroy();
+            this._preRenderedCanvas = null;
+        }
     },
 
 	render: function(canvas) {
 		if(this.getPreRender()) {
             if(!this._preRenderedCanvas) {
                 this.unbindEvent('onPreRenderDone');
-                this.bindEvent('onPreRenderDone', jQuery.proxy(function () {
-                    this._renderPrerenderedImage(canvas);
-                }, this));
+                this.bindEvent('onPreRenderDone', jQuery.proxy(function (e, oData) {
+                    this._renderPrerenderedImage(oData.canvas);
+                }, this), {canvas: canvas});
                 this._preRenderCanvas.setContent(this.getContent());
                 this._preRenderCanvas.rerender();
             } else {
@@ -62,5 +65,6 @@ com.nysoft.josie.gfx.Canvas.Container.extend('com.nysoft.josie.gfx.Canvas.Model'
         //draw prerendered image
         oContext.drawImage(this._preRenderedCanvas, oVector.getX(), oVector.getY(), iWidth, iHeight);
         oContext.restore();
+        this.trigger('onAfterRendering', {canvas: canvas});
     }
 });

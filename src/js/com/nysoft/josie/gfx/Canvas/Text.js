@@ -11,38 +11,33 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 		baseline: { type: 'string', defaultValue: com.nysoft.josie.gfx.Canvas.Text.Baseline.Alphabetic }
 	},
 
-    init: function() {
-        this._prepareFontString();
-    },
-
-	_prepareFontString: function() {
+	prepare: function() {
 		this.font = this.getFontStyle() + ' ' + this.getFontSize() + 'px ' + this.getFontFamily();
 	},
 
 	setFontStyle: function(value) {
 		if(typeof value === 'string') {
 			this.setProperty('fontStyle', value);
-			this._prepareFontString();
+			this.update();
 		}
 	},
 
 	setFontFamily: function(value) {
 		if(typeof value === 'string') {
 			this.setProperty('fontFamily', value);
-			this._prepareFontString();
+			this.update();
 		}
 	},
 
 	setFontSize: function(value) {
 		if(typeof value === 'number') {
 			this.setProperty('fontSize', value);
-			this._prepareFontString();
+			this.update();
 		}
 	},
 
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
-			oVector = this.getVector(),
 			sText = this.getText(),
             sBaseline = this.getBaseline();
 		oContext.save();
@@ -53,24 +48,25 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
         }
         this.applyRotation(oContext, this.metric, this.getFontSize());
 
-		this.applyStrokeSettings(oContext, oVector, sText);
-		this.applyFillSettings(oContext, oVector, sText);
+		this.applyStrokeSettings(oContext, sText);
+		this.applyFillSettings(oContext, sText);
 
 		oContext.restore();
+        this.trigger('onAfterRendering', {canvas: canvas});
 	},
 
-	applyStrokeSettings: function(oContext, oVector, sText) {
+	applyStrokeSettings: function(oContext, sText) {
 		if(this.isStroked()) {
-			oContext.lineWidth = this.getBorderWidth();
-			oContext.strokeStyle = this.getBorderColor();
-			oContext.strokeText(sText, oVector.getX(), oVector.getY());
+			oContext.lineWidth = this.getStrokeWidth();
+			oContext.strokeStyle = this.getStrokeColor();
+			oContext.strokeText(sText, this.getX(), this.getY());
 		}
 	},
 
-	applyFillSettings: function(oContext, oVector, sText) {
+	applyFillSettings: function(oContext, sText) {
 		if(this.isFilled()) {
 			oContext.fillStyle = this.getFillColor();
-			oContext.fillText(sText, oVector.getX(), oVector.getY());
+			oContext.fillText(sText, this.getX(), this.getY());
 		} else {
 			oContext.fillStyle = null;
 		}

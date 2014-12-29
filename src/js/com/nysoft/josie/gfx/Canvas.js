@@ -38,13 +38,13 @@ com.nysoft.josie.core.Control.extend('com.nysoft.josie.gfx.Canvas', {
 	_updateSize: function() {
 		var jqDom = this.getDom(),
             jqParent = jqDom.parent() || jQuery(window),
-		    iInnerHeight = jqParent.innerHeight(),
-		    iInnerWidth = jqParent.innerWidth();
+		    iHeight = jqParent.height(),
+		    iWidth = jqParent.width();
 
-        Josie.log.trace('Canvas::_updateSize', jqParent, iInnerHeight, iInnerWidth);
+        Josie.log.trace('Canvas::_updateSize', jqParent, iHeight, iWidth);
 
-        jqDom.get(0).width = this.width = (!this.getWidth()) ? iInnerWidth : this.getWidth();
-        jqDom.get(0).height = this.height = (!this.getHeight()) ? iInnerHeight : this.getHeight();
+        jqDom.get(0).width = this.width = (!this.getWidth()) ? iWidth : this.getWidth();
+        jqDom.get(0).height = this.height = (!this.getHeight()) ? iHeight : this.getHeight();
     }
 	
 });

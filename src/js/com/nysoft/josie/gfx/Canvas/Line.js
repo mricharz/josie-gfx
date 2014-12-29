@@ -8,31 +8,62 @@ com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Lin
 	},
 
 	init: function() {
-		this.targetVector = new com.nysoft.josie.gfx.Canvas.Vector();
+		this.targetVector = new com.nysoft.josie.gfx.Canvas.Vector(this.getX()+this.getLength(), this.getY());
+        this._super('init');
 	},
-	
-	calculateTargetVector: function() {
-		var oVector = this.getVector();
-		this.targetVector.setX(oVector.getX()+this.getLength());
-		this.targetVector.setY(oVector.getY());
-		return this.targetVector.rotate(oVector, this.getRotation());
-	},
+
+    prepare: function() {
+        this.targetVector.setX(this.getX() + this.getLength());
+        this.targetVector.setY(this.getY());
+        this.targetVector.rotate(this.getVector(), this.getRotation());
+    },
+
+    setLength: function(value) {
+        if(typeof value === 'number') {
+            this.setProperty('length', value);
+            this.update();
+        }
+    },
+
+    setRotation: function(value) {
+        if(typeof value == 'number') {
+            this.setProperty('rotation', value);
+            this.update();
+        }
+    },
+
+    addRotation: function(value) {
+        if(typeof value == 'number') {
+            this.setProperty('rotation', this.getProperty('rotation') + value);
+            this.update();
+        }
+    },
+
+    substractRotation: function(value) {
+        if(typeof value == 'number') {
+            this.setProperty('rotation', this.getProperty('rotation') - value);
+            this.update();
+        }
+    },
 	
 	render: function(canvas) {
 		var oContext = canvas.getContext(),
-			oTargetVector = this.calculateTargetVector();
+            iWidth = this.getLineWidth();
 		
 		oContext.save();
 		oContext.beginPath();
-		this.moveToVector(canvas);
-		
-	    oContext.lineTo(oTargetVector.getX(), oTargetVector.getY());
+
+        this.applyRotation(oContext, iWidth, 0);
+
+		oContext.moveTo(this.getX(), this.getY())
+	    oContext.lineTo(this.targetVector.getX(), this.targetVector.getY());
 	    
-	    oContext.lineWidth = this.getLineWidth();
+	    oContext.lineWidth = iWidth;
 	    oContext.strokeStyle = this.getColor();
 	    oContext.stroke();
 	    
 	    oContext.closePath();
 	    oContext.restore();
+        this.trigger('onAfterRendering', {canvas: canvas});
 	}
 });

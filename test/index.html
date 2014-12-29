@@ -9,7 +9,7 @@
     <script src="../node_modules/josie-core/src/js/core.js"></script>
     <script>
         //set debug logging
-        Josie.log.setLevel(Josie.log.level.Info);
+        Josie.log.setLevel(Josie.log.level.All);
         //set location to gfx-lib to right path (other than core-lib)
         Josie.namespace('com.nysoft.josie.gfx', '../src/js/com/nysoft/josie/gfx');
 
@@ -63,25 +63,25 @@
     <!--
         Text
     -->
-    <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-font-size="36" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00" data-font-style="bold">
+    <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-font-size="36" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00" data-font-style="bold">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="100" data-y="100"></div>
         </div>
     </div>
 
-    <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-font-size="24" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00" data-font-style="bold">
+    <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-font-size="24" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00" data-font-style="bold">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="450" data-y="100"></div>
         </div>
     </div>
 
-    <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00" data-font-style="bold">
+    <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00" data-font-style="bold">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="100" data-y="115"></div>
         </div>
     </div>
 
-    <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-font-size="6" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00" data-font-style="bold">
+    <div data-class="gfx.Canvas.Text" data-text="Some text to render" data-font-size="6" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00" data-font-style="bold">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="220" data-y="115"></div>
         </div>
@@ -90,7 +90,7 @@
     <!--
         Square
     -->
-    <div data-class="gfx.Canvas.Square" data-width="50" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Square" data-width="50" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="100" data-y="125"></div>
         </div>
@@ -99,7 +99,7 @@
     <!--
         Rectangle
     -->
-    <div data-class="gfx.Canvas.Rectangle" data-width="100" data-height="50" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Rectangle" data-width="100" data-height="50" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="100" data-y="200"></div>
         </div>
@@ -108,7 +108,7 @@
     <!--
         Circle
     -->
-    <div data-class="gfx.Canvas.Circle" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Circle" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="125" data-y="300"></div>
         </div>
@@ -117,17 +117,17 @@
     <!--
         Arc
     -->
-    <div data-class="gfx.Canvas.Arc" data-begin-degrees="-90" data-end-degrees="90" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Arc" data-begin-degrees="-90" data-end-degrees="90" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="125" data-y="375"></div>
         </div>
     </div>
-    <div data-class="gfx.Canvas.Arc" data-begin-degrees="90" data-end-degrees="-90" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Arc" data-begin-degrees="90" data-end-degrees="-90" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="200" data-y="375"></div>
         </div>
     </div>
-    <div data-class="gfx.Canvas.Arc" data-begin-degrees="45" data-end-degrees="-135" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Arc" data-begin-degrees="45" data-end-degrees="-135" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="250" data-y="375"></div>
         </div>
@@ -136,7 +136,7 @@
     <!--
         Elipsis
     -->
-    <div data-class="gfx.Canvas.Elipsis" data-width="25" data-height="15" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Elipsis" data-width="50" data-height="20" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="125" data-y="450"></div>
         </div>
@@ -183,17 +183,17 @@
     <!--
         Polygon
     -->
-    <div data-class="gfx.Canvas.Polygon" data-number-of-sides="3" data-size="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Polygon" data-number-of-sides="3" data-size="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="125" data-y="650"></div>
         </div>
     </div>
-    <div data-class="gfx.Canvas.Polygon" data-number-of-sides="6" data-size="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Polygon" data-number-of-sides="6" data-size="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="200" data-y="650"></div>
         </div>
     </div>
-    <div data-class="gfx.Canvas.Polygon" data-number-of-sides="8" data-size="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#00ff00">
+    <div data-class="gfx.Canvas.Polygon" data-number-of-sides="8" data-size="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#00ff00">
         <div data-property="vector">
             <div data-class="gfx.Canvas.Vector" data-x="275" data-y="650"></div>
         </div>
@@ -209,61 +209,61 @@
         <div data-property="content">
 
             <!-- Head -->
-            <div data-class="gfx.Canvas.Circle" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#000000">
+            <div data-class="gfx.Canvas.Circle" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#000000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="50"></div>
                 </div>
             </div>
             <!-- Eyes -->
-            <div data-class="gfx.Canvas.Circle" data-width="3" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="1" data-fill-color="#3333ff" data-border-color="#000000">
+            <div data-class="gfx.Canvas.Circle" data-width="3" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="1" data-fill-color="#3333ff" data-stroke-color="#000000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="40" data-y="45"></div>
                 </div>
             </div>
-            <div data-class="gfx.Canvas.Circle" data-width="3" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="1" data-fill-color="#3333ff" data-border-color="#000000">
+            <div data-class="gfx.Canvas.Circle" data-width="3" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="1" data-fill-color="#3333ff" data-stroke-color="#000000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="60" data-y="45"></div>
                 </div>
             </div>
             <!-- Nose -->
-            <div data-class="gfx.Canvas.Elipsis" data-width="3" data-height="5" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="2" data-fill-color="#ff0000" data-border-color="#AA4444">
+            <div data-class="gfx.Canvas.Elipsis" data-width="3" data-height="5" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="2" data-fill-color="#ff0000" data-stroke-color="#AA4444">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="55"></div>
                 </div>
             </div>
             <!-- Mouth -->
-            <div data-class="gfx.Canvas.Arc" data-begin-degrees="35" data-end-degrees="145" data-width="20" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#992222">
+            <div data-class="gfx.Canvas.Arc" data-begin-degrees="35" data-end-degrees="145" data-width="20" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#992222">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="50"></div>
                 </div>
             </div>
 
             <!-- Body -->
-            <div data-class="gfx.Canvas.Line" data-rotation="90" data-length="50" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="45" data-length="50" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="75"></div>
                 </div>
             </div>
 
             <!-- Arms -->
-            <div data-class="gfx.Canvas.Line" data-rotation="110" data-length="40" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="60" data-length="40" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="75"></div>
                 </div>
             </div>
-            <div data-class="gfx.Canvas.Line" data-rotation="70" data-length="40" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="30" data-length="40" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="75"></div>
                 </div>
             </div>
 
             <!-- Legs -->
-            <div data-class="gfx.Canvas.Line" data-rotation="110" data-length="45" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="60" data-length="45" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="125"></div>
                 </div>
             </div>
-            <div data-class="gfx.Canvas.Line" data-rotation="70" data-length="45" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="30" data-length="45" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="125"></div>
                 </div>
@@ -282,61 +282,61 @@
         <div data-property="content">
 
             <!-- Head -->
-            <div data-class="gfx.Canvas.Circle" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#000000">
+            <div data-class="gfx.Canvas.Circle" data-width="25" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#000000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="50"></div>
                 </div>
             </div>
             <!-- Eyes -->
-            <div data-class="gfx.Canvas.Circle" data-width="3" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="1" data-fill-color="#3333ff" data-border-color="#000000">
+            <div data-class="gfx.Canvas.Circle" data-width="3" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="1" data-fill-color="#3333ff" data-stroke-color="#000000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="40" data-y="45"></div>
                 </div>
             </div>
-            <div data-class="gfx.Canvas.Circle" data-width="3" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="1" data-fill-color="#3333ff" data-border-color="#000000">
+            <div data-class="gfx.Canvas.Circle" data-width="3" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="1" data-fill-color="#3333ff" data-stroke-color="#000000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="60" data-y="45"></div>
                 </div>
             </div>
             <!-- Nose -->
-            <div data-class="gfx.Canvas.Elipsis" data-width="3" data-height="5" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="2" data-fill-color="#ff0000" data-border-color="#AA4444">
+            <div data-class="gfx.Canvas.Elipsis" data-width="3" data-height="5" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="2" data-fill-color="#ff0000" data-stroke-color="#AA4444">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="55"></div>
                 </div>
             </div>
             <!-- Mouth -->
-            <div data-class="gfx.Canvas.Arc" data-begin-degrees="35" data-end-degrees="145" data-width="20" data-type="gfx.Canvas.Type.StrokeAndFill" data-border-width="3" data-fill-color="#ff0000" data-border-color="#992222">
+            <div data-class="gfx.Canvas.Arc" data-begin-degrees="35" data-end-degrees="145" data-width="20" data-type="gfx.Canvas.Type.StrokeAndFill" data-stroke-width="3" data-fill-color="#ff0000" data-stroke-color="#992222">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="50"></div>
                 </div>
             </div>
 
             <!-- Body -->
-            <div data-class="gfx.Canvas.Line" data-rotation="90" data-length="50" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="45" data-length="50" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="75"></div>
                 </div>
             </div>
 
             <!-- Arms -->
-            <div data-class="gfx.Canvas.Line" data-rotation="110" data-length="40" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="60" data-length="40" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="75"></div>
                 </div>
             </div>
-            <div data-class="gfx.Canvas.Line" data-rotation="70" data-length="40" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="30" data-length="40" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="75"></div>
                 </div>
             </div>
 
             <!-- Legs -->
-            <div data-class="gfx.Canvas.Line" data-rotation="110" data-length="45" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="60" data-length="45" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="125"></div>
                 </div>
             </div>
-            <div data-class="gfx.Canvas.Line" data-rotation="70" data-length="45" data-line-width="4" data-color="#000">
+            <div data-class="gfx.Canvas.Line" data-rotation="30" data-length="45" data-line-width="4" data-color="#000">
                 <div data-property="vector">
                     <div data-class="gfx.Canvas.Vector" data-x="50" data-y="125"></div>
                 </div>

@@ -16,19 +16,20 @@ com.nysoft.josie.gfx.Canvas.CanvasObject.extend('com.nysoft.josie.gfx.Canvas.Con
 	},
 
 	render: function(canvas) {
-		var oVector = this.getVector(),
-			iRotation = this.getRotation();
+		var iRotation = Josie.utils.deg2rad(this.getRotation()),
+            oContext = canvas.getContext(),
+            iX = this.getX(),
+            iY = this.getY();
+        oContext.save();
+        this.applyRotation(oContext);
+        oContext.translate(iX, iY);
 		Josie.utils.each(this.getContent(), function(oObject) {
-			oObject.getVector().add(oVector);
-			//apply rotation
-			oObject.addRotation(iRotation);
 			//render
 			oObject.render(canvas);
-			//reset rotation
-			oObject.substractRotation(iRotation);
-			//reset vector
-			oObject.getVector().substract(oVector);
 		});
+        oContext.translate(-iX, -iY);
+        oContext.restore();
+        this.trigger('onAfterRendering', {canvas: canvas});
 	},
 
     destroy: function() {

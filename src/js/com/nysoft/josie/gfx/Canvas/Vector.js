@@ -2,10 +2,6 @@ Josie.require('com.nysoft.josie.core.ManagedObject');
 
 com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector', {
 
-	setProperties: function() {
-		debugger;
-	},
-
 	add: function(vector) {
 		this.x = this.x+vector.getX();
 		this.y = this.y+vector.getY();
@@ -78,7 +74,7 @@ com.nysoft.josie.core.ManagedObject.extend('com.nysoft.josie.gfx.Canvas.Vector',
 	},
 
 	init: function(x, y) {
-		if(x !== undefined && x.length) {
+		if(x !== undefined && x !== null && x.length) {
 			if(jQuery.isPlainObject(x)) {
 				this.setX(x.x);
 				this.setY(x.y);

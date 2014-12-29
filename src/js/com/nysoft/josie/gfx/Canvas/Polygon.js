@@ -8,9 +8,8 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 	
 	render: function(canvas) {
 		var oContext =  canvas.getContext(),
-			oVector = this.getVector(),
-            iX = oVector.getX(),
-            iY = oVector.getY(),
+            iX = this.getX(),
+            iY = this.getY(),
 			iSize = this.getSize(),
 			iNumberOfSides = this.getNumberOfSides();
 
@@ -35,5 +34,6 @@ com.nysoft.josie.gfx.Canvas.StrokeAndFillObject.extend('com.nysoft.josie.gfx.Can
 		this.applyFillSettings(oContext);
 
 		oContext.restore();
+        this.trigger('onAfterRendering', {canvas: canvas});
 	}
 });
